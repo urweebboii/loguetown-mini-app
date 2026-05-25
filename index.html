@@ -1572,6 +1572,16 @@
       font-weight: 900;
     }
 
+    .checkout-fields {
+      padding: 12px;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .checkout-fields .form-field {
+      margin-bottom: 0;
+    }
+
     .input,
     .copy-box {
       width: 100%;
@@ -1582,6 +1592,14 @@
       color: var(--text);
       outline: none;
       padding: 0 12px;
+    }
+
+    .checkout-field-input {
+      min-height: 78px;
+      padding: 10px 12px;
+      resize: vertical;
+      font: inherit;
+      line-height: 1.35;
     }
 
     .copy-box {
@@ -1855,6 +1873,7 @@
       query: "",
       qty: new Map(),
       product: null,
+      checkout: null,
       depositMethod: "binance_pay",
       bot: { name: "Loguetown Shoppie", username: "Loguetown_bot", supportUsername: "urweebboii", logoUrl: "" },
       user: { id: "", username: "", balanceUsdt: "0", joinedAt: "", role: "user", roleLabel: "User", isReseller: false, roleTags: [{ role: "user", label: "User" }] },
@@ -2546,6 +2565,7 @@
         '<div class="detail-grid">' +
           miniStat("Type", product.fulfillmentType === "manual" ? "Manual" : "Auto") +
           miniStat("Limit", product.limitLabel) +
+          (product.customFieldsCount ? miniStat("Details", String(product.customFieldsCount) + " required") : "") +
         '</div>' +
         '<div class="label">Description</div>' +
         '<div class="detail-box">' + escapeHtml(product.description || "No product note") + '</div>' +
@@ -2786,6 +2806,37 @@
       '</section>';
     }
 
+    function checkoutCustomFieldsHtml(checkout) {
+      const fields = Array.isArray(checkout?.customFields) ? checkout.customFields : [];
+      if (!fields.length) return "";
+      return '<div class="label">Required Details</div>' +
+        '<section class="metric-card checkout-fields">' +
+          fields.map((field, index) =>
+            '<label class="form-field checkout-field">' +
+              '<span>' + escapeHtml(field.label || "Required detail") + (field.required === false ? "" : " *") + '</span>' +
+              '<textarea class="input checkout-field-input" rows="2" autocomplete="off" spellcheck="false" data-checkout-field-index="' + String(index) + '" placeholder="' + escapeHtml(field.label || "Required detail") + '"></textarea>' +
+            '</label>'
+          ).join("") +
+        '</section>';
+    }
+
+    function collectCheckoutCustomFields() {
+      const fields = Array.isArray(state.checkout?.customFields) ? state.checkout.customFields : [];
+      const values = {};
+      for (let index = 0; index < fields.length; index += 1) {
+        const field = fields[index] || {};
+        const input = document.querySelector('[data-checkout-field-index="' + String(index) + '"]');
+        const value = String(input?.value || "").trim();
+        if (field.required !== false && !value) {
+          input?.focus?.();
+          showToast("Enter " + String(field.label || "required details") + ".", true);
+          return null;
+        }
+        if (value) values[String(field.id || index)] = value;
+      }
+      return values;
+    }
+
     function deliverySummaryRow(label, value) {
       return '<div class="delivery-summary-row"><strong>' + escapeHtml(label) + '</strong><span>' + escapeHtml(value || "-") + '</span></div>';
     }
@@ -2961,6 +3012,7 @@
       const product = state.product;
       if (!product) return;
       syncProductQtyInput();
+      state.checkout = null;
       openSheet('<div class="sheet-title"><span>Checkout</span><button class="icon-btn" type="button" data-action="closeSheet">' + customEmoji("close", "x", "solo") + '</button></div><p class="small">Loading checkout...</p>');
       try {
         const payload = await postAction("/api/checkout/preview", {
@@ -2977,6 +3029,7 @@
     function renderCheckoutSheet(checkout, couponCode = "", error = "") {
       const product = state.product;
       if (!product) return;
+      state.checkout = checkout || null;
       const paymentDisabled = checkout ? "" : " disabled";
       const methodButtons = orderPaymentMethods().map((method) =>
         '<button class="pay-option" type="button" data-action="startOrderPayment" data-method="' + escapeHtml(method.id) + '" data-coupon="' + escapeHtml(couponCode) + '"' + paymentDisabled + '>' +
@@ -2995,6 +3048,7 @@
         '<div class="sheet-title"><span>Checkout</span><button class="icon-btn" type="button" data-action="closeSheet">' + customEmoji("close", "x", "solo") + '</button></div>' +
         (checkout ? checkoutSummaryHtml(checkout) : "") +
         (error ? '<p class="notice error">' + escapeHtml(error) + '</p>' : "") +
+        (checkout ? checkoutCustomFieldsHtml(checkout) : "") +
         '<button class="btn secondary full" type="button" data-action="changeCoupon" data-coupon="' + escapeHtml(couponCode) + '">' + (couponCode ? "Change Coupon" : "Add Coupon") + '</button>' +
         '<div class="label">Wallet</div>' +
         '<button class="btn full" type="button" data-action="payWallet" data-coupon="' + escapeHtml(couponCode) + '"' + walletDisabled + '>' + customEmoji("wallet", "$") + walletText + '</button>' +
@@ -3007,10 +3061,12 @@
       if (!product || state.busy) return;
       syncProductQtyInput();
       const qty = qtyFor(product);
+      const customFields = collectCheckoutCustomFields();
+      if (customFields === null) return;
       state.busy = true;
       try {
         openSheet(processingSheetHtml("Wallet Pay", product.name, qty));
-        const payload = await postAction("/api/buy", { productId: product.id, qty, couponCode });
+        const payload = await postAction("/api/buy", { productId: product.id, qty, couponCode, customFields });
         applyStatePayload(payload);
         render();
         tg?.HapticFeedback?.notificationOccurred?.("success");
@@ -3031,12 +3087,15 @@
       const product = state.product;
       if (!product || state.busy) return;
       syncProductQtyInput();
+      const customFields = collectCheckoutCustomFields();
+      if (customFields === null) return;
       state.busy = true;
       try {
         const payload = await postAction("/api/order/start", {
           productId: product.id,
           qty: qtyFor(product),
           couponCode,
+          customFields,
           method,
         });
         if (payload.payment) {
@@ -3221,6 +3280,7 @@
 
     function closeSheet() {
       byId("sheetBackdrop").classList.remove("active");
+      state.checkout = null;
     }
 
     async function buyProduct() {
