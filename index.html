@@ -1,0 +1,3513 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Loguetown Shoppie</title>
+  <script src="https://telegram.org/js/telegram-web-app.js?62"></script>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: var(--tg-theme-bg-color, #12171b);
+      --surface: var(--tg-theme-secondary-bg-color, #232b31);
+      --panel: #1b2533;
+      --panel2: #2b363e;
+      --text: var(--tg-theme-text-color, #f8fbff);
+      --muted: var(--tg-theme-hint-color, #9aa7b2);
+      --line: rgba(160, 174, 188, .18);
+      --accent: #dc7470;
+      --accent2: #15ad79;
+      --warn: #e3a324;
+      --danger: #ff656a;
+      --ok: #25c982;
+      --shadow: 0 18px 44px rgba(0, 0, 0, .22);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    body {
+      overflow-x: hidden;
+      width: 100vw;
+      padding: calc(env(safe-area-inset-top) + 12px) 12px calc(env(safe-area-inset-bottom) + 86px);
+    }
+
+    body.app-booting .app,
+    body.app-booting .bottom-nav,
+    body.app-booting .sheet-backdrop,
+    body.app-booting .toast {
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .app-loader {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background:
+        linear-gradient(180deg, rgba(18, 23, 27, .96), rgba(26, 34, 40, .98)),
+        repeating-linear-gradient(135deg, rgba(255, 255, 255, .03) 0 1px, transparent 1px 16px);
+    }
+
+    body:not(.app-booting) .app-loader {
+      display: none;
+    }
+
+    .loader-card {
+      width: min(280px, 84vw);
+      display: grid;
+      justify-items: center;
+      gap: 16px;
+    }
+
+    .loader-mark {
+      width: 82px;
+      height: 82px;
+      border-radius: 20px;
+      position: relative;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(145deg, #1f2c35, #2f3944);
+      border: 1px solid rgba(255, 255, 255, .13);
+      box-shadow: 0 18px 42px rgba(0, 0, 0, .28);
+      animation: loaderFloat 1.9s ease-in-out infinite;
+    }
+
+    .loader-mark::before {
+      content: "";
+      position: absolute;
+      inset: -3px;
+      border-radius: 23px;
+      background: conic-gradient(from 0deg, #ff747b, #f0b247, #25c982, #8bc4ff, #ff747b);
+      opacity: .92;
+      z-index: -1;
+      animation: loaderSpin 2.4s linear infinite;
+    }
+
+    .loader-mark::after {
+      content: "";
+      position: absolute;
+      inset: 10px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, .08);
+    }
+
+    .loader-logo {
+      font-size: 28px;
+      line-height: 1;
+      font-weight: 1000;
+      letter-spacing: 0;
+      color: #fff;
+      text-shadow: 0 3px 12px rgba(0, 0, 0, .42);
+    }
+
+    .loader-title {
+      font-size: 18px;
+      line-height: 1.2;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .loader-subtitle {
+      margin-top: -8px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .loader-track {
+      width: min(260px, 78vw);
+      height: 9px;
+      border-radius: 999px;
+      background: #172029;
+      border: 1px solid rgba(255, 255, 255, .08);
+      overflow: hidden;
+      box-shadow: inset 0 1px 4px rgba(0, 0, 0, .28);
+    }
+
+    .loader-track::before {
+      content: "";
+      display: block;
+      width: 46%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #ff747b, #f0b247, #25c982);
+      animation: loaderSlide 1.22s ease-in-out infinite;
+    }
+
+    .loader-dots {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+    }
+
+    .loader-dots span {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .42);
+      animation: loaderPulse .9s ease-in-out infinite;
+    }
+
+    .loader-dots span:nth-child(2) {
+      animation-delay: .12s;
+    }
+
+    .loader-dots span:nth-child(3) {
+      animation-delay: .24s;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+      color: var(--text);
+      font-weight: 800;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button:disabled {
+      opacity: .48;
+      cursor: default;
+    }
+
+    img {
+      -webkit-user-drag: none;
+      -webkit-touch-callout: none;
+      user-select: none;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 420px;
+      margin: 0 auto;
+    }
+
+    .appbar {
+      height: 48px;
+      display: grid;
+      grid-template-columns: 36px 1fr 36px;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid var(--line);
+      margin: 0 -12px 14px;
+      padding: 0 12px;
+      position: sticky;
+      top: 0;
+      z-index: 8;
+      background: rgba(18, 23, 27, .95);
+      backdrop-filter: blur(10px);
+    }
+
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: transparent;
+      display: grid;
+      place-items: center;
+      font-size: 20px;
+      color: #ff777d;
+      transition: background .14s, transform .14s, box-shadow .14s;
+    }
+
+    .mini-emoji {
+      width: 1.28em;
+      height: 1.28em;
+      object-fit: contain;
+      display: inline-block;
+      vertical-align: -.24em;
+      margin-right: 5px;
+      pointer-events: none;
+    }
+
+    .mini-emoji.solo {
+      margin-right: 0;
+    }
+
+    .nav-icon .mini-emoji {
+      width: 24px;
+      height: 24px;
+      margin: 0;
+      vertical-align: middle;
+    }
+
+    .product-media .mini-emoji,
+    .detail-media .mini-emoji {
+      width: 60%;
+      height: 60%;
+      margin: 0;
+      vertical-align: middle;
+    }
+
+    .title {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 18px;
+      font-weight: 900;
+      line-height: 1.15;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .brand-icon,
+    .avatar,
+    .product-fallback {
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      background: #313d46;
+      color: #fff;
+      font-weight: 900;
+    }
+
+    .brand-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      border: 2px solid rgba(255, 255, 255, .75);
+    }
+
+    .brand-icon img,
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .screen {
+      display: none;
+      animation: fade .16s ease-out;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    @keyframes fade {
+      from { opacity: .72; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #c36f8e 0%, #7d37e3 100%);
+      border: 1px solid rgba(255, 255, 255, .16);
+      border-radius: 8px;
+      padding: 22px 20px 18px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+
+    .hero .brand-icon {
+      width: 54px;
+      height: 54px;
+      margin-bottom: 16px;
+      background: rgba(255, 255, 255, .92);
+      color: #14191f;
+      font-size: 24px;
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      line-height: 1.2;
+      color: rgba(255, 255, 255, .82);
+      margin: 0 0 7px;
+    }
+
+    .hero-name {
+      margin: 0 0 22px;
+      font-size: 20px;
+      line-height: 1.2;
+      font-weight: 900;
+      overflow-wrap: anywhere;
+    }
+
+    .hero-balance {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .hero-balance strong {
+      font-size: 31px;
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .hero-balance span {
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin: 18px 4px 10px;
+    }
+
+    .hero .label {
+      color: rgba(255, 255, 255, .78);
+      margin: 0 0 16px;
+    }
+
+    .hero-actions,
+    .two-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .btn {
+      min-height: 42px;
+      border-radius: 8px;
+      padding: 0 14px;
+      background: var(--accent);
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      white-space: nowrap;
+      user-select: none;
+      transition: background .14s, border-color .14s, transform .14s, box-shadow .14s, opacity .14s;
+    }
+
+    .btn.secondary {
+      background: #303b44;
+      border: 1px solid rgba(255, 255, 255, .08);
+    }
+
+    .btn.ghost {
+      background: rgba(255, 255, 255, .13);
+      border: 1px solid rgba(255, 255, 255, .24);
+    }
+
+    .btn.full {
+      width: 100%;
+    }
+
+    .search {
+      width: 100%;
+      min-height: 44px;
+      border: 1px solid rgba(152, 169, 184, .28);
+      border-radius: 8px;
+      background: #2c3740;
+      color: var(--text);
+      outline: none;
+      padding: 0 14px;
+      margin-bottom: 14px;
+    }
+
+    .filter-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .chip {
+      min-height: 30px;
+      border-radius: 8px;
+      padding: 0 12px;
+      background: #313b44;
+      color: var(--muted);
+      font-size: 13px;
+      transition: background .14s, transform .14s, box-shadow .14s;
+    }
+
+    .chip.active {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .product-list,
+    .stack {
+      display: grid;
+      gap: 10px;
+    }
+
+    .product-card,
+    .order-card,
+    .metric-card,
+    .list-card {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .product-card {
+      min-height: 110px;
+      padding: 12px;
+      display: grid;
+      grid-template-columns: 64px minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+      transition: border-color .14s, background .14s, transform .14s, box-shadow .14s;
+    }
+
+    .product-card > div:last-child {
+      min-width: 0;
+    }
+
+    .product-card:active {
+      transform: scale(.995);
+    }
+
+    .product-card:hover {
+      border-color: rgba(139, 196, 255, .34);
+      background: #202c3b;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .035);
+    }
+
+    .product-card:focus-visible {
+      outline: 2px solid rgba(139, 196, 255, .8);
+      outline-offset: 2px;
+    }
+
+    .product-card .row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
+
+    .product-open {
+      width: 22px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .product-media {
+      width: 64px;
+      height: 64px;
+      border-radius: 8px;
+      background: #2f3d45;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      font-size: 29px;
+    }
+
+    .product-media img,
+    .detail-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .product-name {
+      margin: 0 0 5px;
+      font-size: 15px;
+      line-height: 1.22;
+      font-weight: 900;
+      overflow-wrap: anywhere;
+    }
+
+    .product-desc {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+      margin: 0 0 9px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      overflow-wrap: anywhere;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .price {
+      color: #ff747b;
+      font-weight: 900;
+      font-size: 16px;
+      white-space: nowrap;
+    }
+
+    .reseller-chip {
+      display: inline-flex;
+      align-items: center;
+      height: 20px;
+      padding: 0 7px;
+      border-radius: 999px;
+      border: 1px solid rgba(46, 230, 166, .32);
+      background: rgba(46, 230, 166, .12);
+      color: #2ee6a6;
+      font-size: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .stock {
+      color: var(--muted);
+      font-size: 11px;
+      white-space: nowrap;
+      text-align: right;
+    }
+
+    .wallet-panel {
+      background: #0eaa76;
+      border: 1px solid rgba(255, 255, 255, .13);
+      border-radius: 16px;
+      padding: 22px 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 18px 40px rgba(10, 170, 118, .18);
+    }
+
+    .wallet-panel .label {
+      color: rgba(255, 255, 255, .78);
+      margin: 0 0 8px;
+    }
+
+    .wallet-amount {
+      font-size: 32px;
+      line-height: 1;
+      font-weight: 900;
+      margin-bottom: 13px;
+    }
+
+    .wallet-sub {
+      font-size: 12px;
+      color: rgba(255, 255, 255, .84);
+    }
+
+    .wallet-actions {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .wallet-live {
+      border: 1px solid rgba(242, 207, 74, .32);
+      background: rgba(242, 207, 74, .09);
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin: -8px 0 18px;
+      color: #f2cf4a;
+      font-size: 12px;
+      font-weight: 900;
+      line-height: 1.35;
+    }
+
+    .order-card,
+    .list-card {
+      padding: 12px 14px;
+    }
+
+    .order-click {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      color: inherit;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+      user-select: none;
+      transition: border-color .14s, background .14s, transform .14s, box-shadow .14s;
+    }
+
+    .order-click:active {
+      transform: scale(.995);
+    }
+
+    .order-click:focus-visible {
+      outline: 2px solid rgba(139, 196, 255, .8);
+      outline-offset: 2px;
+    }
+
+    .order-card .row {
+      align-items: flex-start;
+    }
+
+    .order-card .row + .row {
+      align-items: center;
+    }
+
+    .order-status-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .order-open {
+      color: var(--muted);
+      font-size: 20px;
+      font-weight: 900;
+      line-height: 1;
+      transition: color .14s, transform .14s;
+    }
+
+    .order-title {
+      font-weight: 900;
+      line-height: 1.22;
+      margin-bottom: 5px;
+      overflow-wrap: anywhere;
+    }
+
+    .order-meta,
+    .small {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .status {
+      border-radius: 8px;
+      padding: 4px 8px;
+      font-size: 10px;
+      font-weight: 900;
+      color: #fff;
+      background: #34414a;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .status.delivered,
+    .status.credited,
+    .status.completed {
+      background: #0c8d60;
+    }
+
+    .status.cancelled,
+    .status.failed,
+    .status.rejected {
+      background: #b86d22;
+    }
+
+    .status.pending,
+    .status.pending_payment,
+    .status.pending_review,
+    .status.manual_pending,
+    .status.manual_accepted {
+      background: #b89a24;
+    }
+
+    .status.closed {
+      background: #53616d;
+    }
+
+    .status.open {
+      background: #b89a24;
+    }
+
+    .amount-state.credit {
+      color: var(--ok);
+    }
+
+    .amount-state.debit {
+      color: var(--danger);
+    }
+
+    .amount-state.rejected {
+      color: #ffad4a;
+    }
+
+    .amount-state.pending {
+      color: #f2cf4a;
+    }
+
+    .amount-state.neutral {
+      color: var(--muted);
+    }
+
+    .deposit-progress {
+      display: grid;
+      gap: 7px;
+      margin-top: 10px;
+    }
+
+    .deposit-progress-track,
+    .verify-progress-track {
+      height: 8px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: #101820;
+      border: 1px solid rgba(255, 255, 255, .08);
+    }
+
+    .deposit-progress-fill,
+    .verify-progress-fill {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background:
+        linear-gradient(90deg, rgba(255, 255, 255, .24) 0 22%, transparent 22% 44%, rgba(255, 255, 255, .16) 44% 66%, transparent 66%),
+        linear-gradient(90deg, #f2cf4a, #25c982);
+      background-size: 34px 100%, 100% 100%;
+      animation: progressStripe .75s linear infinite;
+      transition: width .22s ease;
+    }
+
+    .deposit-progress-meta,
+    .verify-progress-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      line-height: 1.35;
+    }
+
+    .verify-card {
+      border: 1px solid rgba(139, 196, 255, .24);
+      background: #1b2533;
+      border-radius: 8px;
+      padding: 14px;
+      display: grid;
+      gap: 13px;
+    }
+
+    .verify-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-weight: 900;
+    }
+
+    .verify-orbit {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      border: 3px solid rgba(139, 196, 255, .22);
+      border-top-color: #8bc4ff;
+      animation: loaderSpin .85s linear infinite;
+      flex: 0 0 auto;
+    }
+
+    .review-upload {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .file-input {
+      width: 100%;
+      border: 1px dashed rgba(139, 196, 255, .34);
+      border-radius: 8px;
+      background: #1b2533;
+      color: var(--muted);
+      padding: 12px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .transaction-card {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 14px;
+      padding: 12px 14px;
+      display: grid;
+      gap: 4px;
+    }
+
+    .transaction-card .row {
+      align-items: start;
+    }
+
+    .tx-amount {
+      font-size: 15px;
+      line-height: 1.2;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .tx-amount.credit {
+      color: var(--ok);
+    }
+
+    .tx-amount.debit {
+      color: var(--danger);
+    }
+
+    .tx-amount.neutral {
+      color: var(--muted);
+    }
+
+    .profile {
+      display: grid;
+      gap: 12px;
+      padding: 4px 0 10px;
+    }
+
+    .profile-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .profile-main {
+      min-width: 0;
+      display: grid;
+      gap: 3px;
+    }
+
+    .profile-name-line {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      flex-wrap: wrap;
+    }
+
+    .avatar {
+      width: 54px;
+      height: 54px;
+      border-radius: 12px;
+      background: #11171d;
+      border: 1px solid var(--line);
+      font-size: 22px;
+      flex: 0 0 auto;
+    }
+
+    .profile-name {
+      font-size: 20px;
+      line-height: 1.2;
+      font-weight: 900;
+      overflow-wrap: anywhere;
+    }
+
+    .role-badges {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      min-width: 0;
+    }
+
+    .role-badge {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      height: 22px;
+      padding: 0 9px;
+      border-radius: 8px;
+      border: 1px solid rgba(149, 163, 178, .34);
+      background: rgba(149, 163, 178, .1);
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1;
+      font-weight: 900;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      overflow: hidden;
+      isolation: isolate;
+      animation: none;
+    }
+
+    .role-badge::after {
+      content: "";
+      position: absolute;
+      inset: -45% -75%;
+      background: linear-gradient(115deg, transparent 28%, rgba(255, 255, 255, .58) 50%, transparent 72%);
+      transform: translateX(-130%);
+      opacity: 0;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .role-badge.reseller {
+      color: #09251e;
+      border-color: rgba(46, 230, 166, .72);
+      background: linear-gradient(135deg, #2ee6a6, #d9f99d);
+      box-shadow: 0 0 0 rgba(46, 230, 166, 0);
+      animation: resellerBadge 2.2s ease-in-out infinite;
+    }
+
+    .role-badge.reseller::after {
+      opacity: .7;
+      animation: badgeSweep 2.4s ease-in-out infinite;
+    }
+
+    .role-badge.owner {
+      color: #3a2600;
+      border-color: rgba(255, 215, 106, .58);
+      background: linear-gradient(135deg, #ffd76a, #ffad4d);
+      box-shadow: 0 0 0 rgba(255, 215, 106, 0);
+      animation: ownerBadge 2.5s ease-in-out infinite;
+    }
+
+    .role-badge.owner::after {
+      opacity: .38;
+      animation: badgeSweep 3s ease-in-out infinite;
+    }
+
+    .role-badge.admin {
+      color: #d8fff5;
+      border-color: rgba(46, 230, 166, .44);
+      background: rgba(46, 230, 166, .13);
+      box-shadow: 0 0 0 rgba(46, 230, 166, 0);
+      animation: adminBadge 2.8s ease-in-out infinite;
+    }
+
+    .role-badge.admin::after {
+      opacity: .26;
+      animation: badgeSweep 3.2s ease-in-out infinite;
+    }
+
+    .role-badge.user {
+      animation: none;
+    }
+
+    @keyframes resellerBadge {
+      0%, 100% {
+        transform: translateY(0);
+        box-shadow: 0 0 0 rgba(46, 230, 166, 0);
+      }
+      50% {
+        transform: translateY(-1px);
+        box-shadow: 0 0 18px rgba(46, 230, 166, .34);
+      }
+    }
+
+    @keyframes ownerBadge {
+      0%, 100% {
+        transform: translateY(0);
+        box-shadow: 0 0 0 rgba(255, 215, 106, 0);
+      }
+      50% {
+        transform: translateY(-1px);
+        box-shadow: 0 0 15px rgba(255, 215, 106, .26);
+      }
+    }
+
+    @keyframes adminBadge {
+      0%, 100% {
+        transform: translateY(0);
+        box-shadow: 0 0 0 rgba(46, 230, 166, 0);
+      }
+      50% {
+        transform: translateY(-1px);
+        box-shadow: 0 0 13px rgba(46, 230, 166, .2);
+      }
+    }
+
+    @keyframes badgeSweep {
+      0%, 40% {
+        transform: translateX(-130%);
+      }
+      72%, 100% {
+        transform: translateX(130%);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .role-badge,
+      .role-badge::after {
+        animation: none;
+      }
+    }
+
+    .action-card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
+      background: var(--panel);
+    }
+
+    .action-item {
+      width: 100%;
+      min-height: 48px;
+      padding: 0 14px;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--line);
+      gap: 12px;
+      text-align: left;
+      transition: background .14s, transform .14s, box-shadow .14s;
+    }
+
+    .action-item:last-child {
+      border-bottom: 0;
+    }
+
+    .action-item strong {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .action-item span {
+      color: var(--muted);
+      transition: color .14s, transform .14s;
+    }
+
+    .action-meta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex: 0 0 auto;
+    }
+
+    .session-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      padding: 12px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .session-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: start;
+      gap: 12px;
+    }
+
+    .session-subject {
+      font-size: 16px;
+      line-height: 1.25;
+      font-weight: 900;
+      overflow-wrap: anywhere;
+    }
+
+    .session-meta {
+      display: grid;
+      gap: 5px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+      font-weight: 700;
+    }
+
+    .session-actions {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+
+    .action-meta-value {
+      min-width: 22px;
+      text-align: right;
+      color: #8bc4ff;
+      font-weight: 900;
+    }
+
+    .metric-card {
+      display: grid;
+      gap: 0;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
+      background: var(--panel);
+      margin-top: 4px;
+    }
+
+    .metric-row {
+      min-height: 48px;
+      padding: 0 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--line);
+      gap: 10px;
+    }
+
+    .metric-row:last-child {
+      border-bottom: 0;
+    }
+
+    .metric-row strong,
+    .metric-row span {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .metric-row span {
+      color: var(--muted);
+      text-align: right;
+    }
+
+    .delivery-card {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 8px;
+      padding: 14px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .delivery-title {
+      font-size: 20px;
+      line-height: 1.15;
+      font-weight: 900;
+      overflow-wrap: anywhere;
+    }
+
+    .order-detail-note {
+      margin-top: 10px;
+    }
+
+    .delivery-steps {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .delivery-step,
+    .delivery-summary-row {
+      display: grid;
+      grid-template-columns: minmax(92px, auto) minmax(0, 1fr);
+      gap: 10px;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+      align-items: start;
+    }
+
+    .delivery-step:last-child,
+    .delivery-summary-row:last-child {
+      border-bottom: 0;
+    }
+
+    .delivery-step span,
+    .delivery-summary-row span {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .delivery-summary {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .delivery-items {
+      display: grid;
+      gap: 10px;
+      max-height: 260px;
+      overflow: auto;
+    }
+
+    .delivery-item-index {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+      margin: 0 0 4px;
+    }
+
+    .delivery-item {
+      margin: 0;
+      border-left: 3px solid #f0b247;
+      border-radius: 6px;
+      background: rgba(240, 178, 71, .14);
+      padding: 10px 11px;
+      color: #ffd18b;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+      font: inherit;
+      line-height: 1.35;
+    }
+
+    .delivery-item a {
+      color: #8bc4ff;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      word-break: break-all;
+    }
+
+    .delivery-link {
+      display: block;
+      margin: 6px 0;
+      border: 1px solid rgba(139, 196, 255, .34);
+      border-radius: 8px;
+      background: rgba(139, 196, 255, .10);
+      padding: 10px 11px;
+      color: #8bc4ff;
+      text-decoration: none;
+      word-break: break-all;
+      transition: border-color .14s, background .14s, transform .14s, box-shadow .14s;
+    }
+
+    .delivery-link strong {
+      display: block;
+      color: #d7ecff;
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+
+    .detail-media {
+      height: 216px;
+      border-radius: 8px;
+      background: #303c45;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      margin-bottom: 18px;
+      font-size: 78px;
+    }
+
+    .detail-title {
+      font-size: 22px;
+      line-height: 1.18;
+      font-weight: 900;
+      margin: 0 0 14px;
+      overflow-wrap: anywhere;
+    }
+
+    .detail-price {
+      color: #ff747b;
+      font-size: 30px;
+      line-height: 1;
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+
+    .detail-price-note {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+      margin: -2px 0 10px;
+    }
+
+    .detail-box {
+      border-radius: 8px;
+      background: #303b44;
+      padding: 14px;
+      line-height: 1.45;
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin: 12px 0 18px;
+    }
+
+    .mini-stat {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      background: var(--panel);
+    }
+
+    .mini-stat span {
+      color: var(--muted);
+      font-size: 11px;
+      display: block;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      font-weight: 800;
+    }
+
+    .mini-stat strong {
+      font-size: 14px;
+      line-height: 1.2;
+      overflow-wrap: anywhere;
+    }
+
+    .qty {
+      display: inline-grid;
+      grid-template-columns: 42px minmax(76px, 104px) 42px;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .qty button,
+    .qty input {
+      height: 42px;
+      border-radius: 8px;
+      background: var(--panel);
+      display: grid;
+      place-items: center;
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .qty button {
+      border: 1px solid transparent;
+      transition: border-color .14s, background .14s, transform .14s, box-shadow .14s;
+    }
+
+    .qty input {
+      width: 100%;
+      border: 1px solid var(--line);
+      color: var(--text);
+      text-align: center;
+      outline: none;
+      padding: 0 8px;
+    }
+
+    .sticky-buy {
+      position: sticky;
+      bottom: calc(env(safe-area-inset-bottom) + 76px);
+      z-index: 6;
+      margin-top: 18px;
+      box-shadow: 0 -12px 28px rgba(18, 23, 27, .72);
+    }
+
+    .empty,
+    .notice {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      background: var(--panel);
+      color: var(--muted);
+      line-height: 1.42;
+    }
+
+    .notice.error {
+      color: var(--danger);
+    }
+
+    .bottom-nav {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 9;
+      padding: 7px 10px calc(env(safe-area-inset-bottom) + 8px);
+      background: rgba(31, 38, 44, .97);
+      border-top: 1px solid var(--line);
+      backdrop-filter: blur(12px);
+    }
+
+    .nav-inner {
+      width: 100%;
+      max-width: 420px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 4px;
+    }
+
+    .nav-btn {
+      background: transparent;
+      border-radius: 8px;
+      min-height: 52px;
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.1;
+      gap: 2px;
+      font-weight: 800;
+      transition: background .14s, color .14s, transform .14s;
+    }
+
+    .nav-btn .nav-icon {
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .nav-btn.active {
+      color: #ff747b;
+    }
+
+    .sheet-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .54);
+      z-index: 20;
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 12px;
+    }
+
+    .sheet-backdrop.active {
+      display: flex;
+    }
+
+    .sheet {
+      width: 100%;
+      max-width: 420px;
+      border-radius: 8px 8px 0 0;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      padding: 18px;
+      box-shadow: var(--shadow);
+      max-height: min(86vh, 620px);
+      overflow: auto;
+    }
+
+    .sheet-handle {
+      width: 40px;
+      height: 4px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .16);
+      margin: -4px auto 16px;
+    }
+
+    .sheet-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 20px;
+      font-weight: 900;
+      margin-bottom: 14px;
+    }
+
+    @media (min-width: 720px) {
+      .sheet {
+        max-width: 560px;
+      }
+
+      .delivery-items {
+        max-height: 360px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .sheet {
+        padding: 14px;
+      }
+
+      .metric-row {
+        display: grid;
+        grid-template-columns: 1fr;
+        min-height: auto;
+        padding: 10px 12px;
+        align-items: start;
+      }
+
+      .metric-row span {
+        text-align: left;
+      }
+    }
+
+    .pay-option {
+      width: 100%;
+      min-height: 52px;
+      border-radius: 8px;
+      background: #1b2533;
+      border: 1px solid rgba(139, 196, 255, .18);
+      padding: 0 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 900;
+      color: var(--text);
+      text-align: left;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .03);
+      user-select: none;
+      transition: border-color .14s, background .14s, transform .14s, box-shadow .14s;
+    }
+
+    .pay-option span {
+      min-width: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      overflow-wrap: anywhere;
+      line-height: 1.2;
+    }
+
+    .pay-option:active {
+      transform: scale(.995);
+    }
+
+    .pay-option.active {
+      border-color: #ff747b;
+      background: #2c3151;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .04), 0 0 0 1px rgba(255, 116, 123, .22);
+    }
+
+    .deposit-methods {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .form-field {
+      display: grid;
+      gap: 7px;
+      margin-bottom: 12px;
+    }
+
+    .form-field span {
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.2;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      font-weight: 900;
+    }
+
+    .input,
+    .copy-box {
+      width: 100%;
+      min-height: 46px;
+      border: 1px solid rgba(152, 169, 184, .28);
+      border-radius: 8px;
+      background: #2c3740;
+      color: var(--text);
+      outline: none;
+      padding: 0 12px;
+    }
+
+    .copy-box {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 8px;
+      padding: 8px;
+      overflow: hidden;
+    }
+
+    .copy-value {
+      min-width: 0;
+      overflow-wrap: anywhere;
+      font-size: 13px;
+      line-height: 1.3;
+      color: #f7d0cf;
+    }
+
+    .copy-btn {
+      min-height: 34px;
+      border-radius: 8px;
+      background: var(--accent);
+      color: #fff;
+      padding: 0 10px;
+      white-space: nowrap;
+      transition: background .14s, transform .14s, box-shadow .14s;
+    }
+
+    .qr-box {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #202a31;
+      padding: 10px;
+      margin-bottom: 12px;
+      display: grid;
+      grid-template-columns: 92px 1fr;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .qr-box img {
+      width: 92px;
+      height: 92px;
+      border-radius: 8px;
+      object-fit: cover;
+      background: #fff;
+      display: block;
+    }
+
+    .qr-box.upi {
+      grid-template-columns: 1fr;
+      justify-items: center;
+      text-align: center;
+      padding: 14px;
+    }
+
+    .qr-box.upi img {
+      width: min(236px, 100%);
+      height: auto;
+      aspect-ratio: 1 / 1;
+      object-fit: contain;
+    }
+
+    .qr-box strong {
+      display: block;
+      margin-bottom: 5px;
+      overflow-wrap: anywhere;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: calc(env(safe-area-inset-bottom) + 84px);
+      transform: translateX(-50%) translateY(12px);
+      background: #101820;
+      border: 1px solid var(--line);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 10px 12px;
+      z-index: 30;
+      max-width: min(390px, calc(100vw - 24px));
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .18s, transform .18s;
+      box-shadow: var(--shadow);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .toast.active {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .skeleton {
+      height: 110px;
+      border-radius: 8px;
+      background: linear-gradient(90deg, var(--panel), #253140, var(--panel));
+      background-size: 240% 100%;
+      animation: shimmer 1.15s infinite linear;
+    }
+
+    .btn:focus-visible,
+    .chip:focus-visible,
+    .icon-btn:focus-visible,
+    .nav-btn:focus-visible,
+    .action-item:focus-visible,
+    .pay-option:focus-visible,
+    .copy-btn:focus-visible,
+    .delivery-link:focus-visible,
+    .qty button:focus-visible {
+      outline: 2px solid rgba(139, 196, 255, .8);
+      outline-offset: 2px;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .product-card:hover,
+      .order-click:hover,
+      .pay-option:hover,
+      .delivery-link:hover {
+        transform: translateY(-1px);
+        border-color: rgba(139, 196, 255, .42);
+        background: #202c3b;
+        box-shadow: 0 10px 22px rgba(0, 0, 0, .14), inset 0 1px 0 rgba(255, 255, 255, .04);
+      }
+
+      .product-card:hover .product-open,
+      .order-click:hover .order-open,
+      .action-item:hover span {
+        color: #8bc4ff;
+        transform: translateX(2px);
+      }
+
+      .action-item:hover {
+        background: #202c3b;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, .035);
+      }
+
+      .btn:not(:disabled):hover,
+      .copy-btn:not(:disabled):hover {
+        transform: translateY(-1px);
+        background: #e37f7c;
+        box-shadow: 0 10px 22px rgba(220, 116, 112, .18);
+      }
+
+      .btn.secondary:not(:disabled):hover {
+        background: #3a4650;
+        border-color: rgba(139, 196, 255, .26);
+        box-shadow: 0 10px 22px rgba(0, 0, 0, .14);
+      }
+
+      .btn.ghost:not(:disabled):hover {
+        background: rgba(255, 255, 255, .19);
+        border-color: rgba(255, 255, 255, .36);
+        box-shadow: 0 10px 22px rgba(0, 0, 0, .12);
+      }
+
+      .icon-btn:hover,
+      .chip:hover,
+      .nav-btn:hover,
+      .qty button:not(:disabled):hover {
+        transform: translateY(-1px);
+        background: #202c3b;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, .035);
+      }
+
+      .qty button:not(:disabled):hover {
+        border-color: rgba(139, 196, 255, .32);
+      }
+
+      .nav-btn:hover {
+        color: #fff;
+      }
+
+      .nav-btn.active:hover {
+        color: #ff747b;
+      }
+
+      .chip.active:hover,
+      .pay-option.active:hover {
+        border-color: #ff747b;
+        background: #33385a;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, .04), 0 0 0 1px rgba(255, 116, 123, .24);
+      }
+    }
+
+    @keyframes shimmer {
+      from { background-position: 120% 0; }
+      to { background-position: -120% 0; }
+    }
+
+    @keyframes loaderSpin {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes loaderFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    @keyframes loaderSlide {
+      0% { transform: translateX(-110%); }
+      55%, 100% { transform: translateX(230%); }
+    }
+
+    @keyframes loaderPulse {
+      0%, 100% { transform: scale(.72); opacity: .42; }
+      50% { transform: scale(1); opacity: .95; }
+    }
+
+    @keyframes progressStripe {
+      from { background-position: 0 0, 0 0; }
+      to { background-position: 34px 0, 0 0; }
+    }
+  </style>
+</head>
+<body class="app-booting">
+  <div class="app-loader" id="appLoader" aria-live="polite">
+    <div class="loader-card">
+      <div class="loader-mark" aria-hidden="true">
+        <span class="loader-logo">LT</span>
+      </div>
+      <div class="loader-title">Loguetown Shoppie</div>
+      <div class="loader-subtitle">Loading shop</div>
+      <div class="loader-track"></div>
+      <div class="loader-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+    </div>
+  </div>
+  <main class="app">
+    <header class="appbar">
+      <button class="icon-btn" id="backBtn" type="button" aria-label="Back"><span aria-hidden="true">&lsaquo;</span></button>
+      <div class="title"><span class="brand-icon" id="brandIcon">L</span><span id="pageTitle">Loguetown Shoppie</span></div>
+      <button class="icon-btn" id="refreshBtn" type="button" aria-label="Refresh"><span aria-hidden="true">&#8635;</span></button>
+    </header>
+
+    <section id="notice" class="notice" hidden></section>
+
+    <section id="home" class="screen active"></section>
+    <section id="shop" class="screen"></section>
+    <section id="orders" class="screen"></section>
+    <section id="wallet" class="screen"></section>
+    <section id="me" class="screen"></section>
+    <section id="liveSessions" class="screen"></section>
+    <section id="product" class="screen"></section>
+  </main>
+
+  <nav class="bottom-nav" aria-label="Primary">
+    <div class="nav-inner">
+      <button class="nav-btn active" type="button" data-tab="home"><span class="nav-icon" data-emoji-key="home" data-fallback="🏠">🏠</span><span>Home</span></button>
+      <button class="nav-btn" type="button" data-tab="shop"><span class="nav-icon" data-emoji-key="shop" data-fallback="🛒">🛒</span><span>Shop</span></button>
+      <button class="nav-btn" type="button" data-tab="orders"><span class="nav-icon" data-emoji-key="orders" data-fallback="💳">💳</span><span>Orders</span></button>
+      <button class="nav-btn" type="button" data-tab="wallet"><span class="nav-icon" data-emoji-key="wallet" data-fallback="💰">💰</span><span>Wallet</span></button>
+      <button class="nav-btn" type="button" data-tab="me"><span class="nav-icon" data-emoji-key="me" data-fallback="👤">👤</span><span>Me</span></button>
+    </div>
+  </nav>
+
+  <div class="sheet-backdrop" id="sheetBackdrop" role="dialog" aria-modal="true">
+    <div class="sheet" id="sheet"></div>
+  </div>
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const API_BASE = "https://naoqksnzfculcajjxgiu.supabase.co/functions/v1/mini-app";
+    const tg = window.Telegram && window.Telegram.WebApp;
+    const state = {
+      ready: false,
+      busy: false,
+      tab: "home",
+      previousTab: "home",
+      query: "",
+      qty: new Map(),
+      product: null,
+      depositMethod: "binance_pay",
+      bot: { name: "Loguetown Shoppie", username: "Loguetown_bot", supportUsername: "urweebboii", logoUrl: "" },
+      user: { id: "", username: "", balanceUsdt: "0", joinedAt: "", role: "user", roleLabel: "User", isReseller: false, roleTags: [{ role: "user", label: "User" }] },
+      stats: { totalDepositedUsdt: "0", ordersCount: 0, depositsCount: 0, transactionsCount: 0, liveSessionsCount: 0 },
+      products: [],
+      orders: [],
+      deposits: [],
+      transactions: [],
+      liveSessions: [],
+      liveSessionsLoaded: false,
+      liveSessionsLoading: false,
+      depositMethods: [],
+      customEmojiIds: {},
+      customEmojiUrls: {},
+      customEmojiObjectUrls: {},
+      liveRefreshInFlight: false,
+    };
+    let depositVerifyTimer = 0;
+    let depositVerifyPercent = 0;
+
+    function showAppShell() {
+      document.body.classList.remove("app-booting");
+      try {
+        tg?.ready?.();
+      } catch {}
+    }
+
+    function hideAppShell() {
+      document.body.classList.add("app-booting");
+    }
+
+    const byId = (id) => document.getElementById(id);
+    const authHeader = () => ({ "authorization": "tma " + (tg?.initData || "") });
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;");
+    }
+
+    function money(value) {
+      const num = Number(value || 0);
+      if (!Number.isFinite(num)) return "0";
+      return num.toLocaleString("en-US", { maximumFractionDigits: 3 });
+    }
+
+    function initials(name) {
+      const raw = String(name || "L").replace(/^@+/, "").trim();
+      return (raw.slice(0, 1) || "L").toUpperCase();
+    }
+
+    function logoHtml() {
+      const logo = state.bot.logoUrl || "";
+      if (logo) return '<img src="' + escapeHtml(logo) + '" alt="" draggable="false" oncontextmenu="return false">';
+      return "L";
+    }
+
+    function syncBrandLogo() {
+      const icon = byId("brandIcon");
+      if (icon) icon.innerHTML = logoHtml();
+    }
+
+    function methodById(id) {
+      return state.depositMethods.find((method) => method.id === id) || state.depositMethods[0] || null;
+    }
+
+    function customEmojiAssetUrl(customEmojiId) {
+      return API_BASE + "/api/custom-emoji/" + encodeURIComponent(String(customEmojiId || ""));
+    }
+
+    async function preloadCustomEmojis() {
+      const entries = Object.entries(state.customEmojiIds || {});
+      for (const product of state.products || []) {
+        if (/^\d{8,32}$/.test(String(product.customEmojiId || ""))) {
+          entries.push(["product:" + product.id, String(product.customEmojiId)]);
+        }
+      }
+      await Promise.all(entries.map(async ([key, customEmojiId]) => {
+        if (state.customEmojiObjectUrls[key] || !/^\d{8,32}$/.test(String(customEmojiId || ""))) return;
+        try {
+          const response = await fetch(customEmojiAssetUrl(customEmojiId), {
+            headers: authHeader(),
+            cache: "no-store",
+          });
+          if (!response.ok) return;
+          const blob = await response.blob();
+          state.customEmojiObjectUrls[key] = URL.createObjectURL(blob);
+        } catch (error) {
+          console.warn("custom emoji load failed", key, error);
+        }
+      }));
+    }
+
+    function customEmoji(key, fallback, extraClass = "") {
+      const src = state.customEmojiObjectUrls?.[key] || "";
+      const cleanFallback = String(fallback || "");
+      if (!src) return escapeHtml(cleanFallback);
+      const cls = ("mini-emoji " + extraClass).trim();
+      return '<img class="' + escapeHtml(cls) + '" src="' + escapeHtml(src) + '" alt="' + escapeHtml(cleanFallback) + '" loading="lazy" draggable="false" oncontextmenu="return false" onerror="this.outerHTML=this.alt">';
+    }
+
+    function productEmojiKey(product) {
+      const key = "product:" + (product?.id || "");
+      return state.customEmojiObjectUrls?.[key] ? key : "product";
+    }
+
+    function renderNavIcons() {
+      document.querySelectorAll("[data-emoji-key]").forEach((node) => {
+        node.innerHTML = customEmoji(node.dataset.emojiKey, node.dataset.fallback || "", "solo");
+      });
+    }
+
+    function formatDate(value) {
+      if (!value) return "-";
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return "-";
+      return date.toLocaleString("en-US", {
+        month: "short",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    }
+
+    function totalFor(product) {
+      return Number(product?.price || 0) * qtyFor(product);
+    }
+
+    function qtyFor(product) {
+      if (!product) return 1;
+      if (!state.qty.has(product.id)) state.qty.set(product.id, product.minQty || 1);
+      const current = state.qty.get(product.id);
+      return Math.max(product.minQty || 1, Math.min(current, product.maxQty || current));
+    }
+
+    function clampQty(product, value) {
+      const min = product?.minQty || 1;
+      const max = product?.maxQty || min;
+      const parsed = Math.floor(Number(value));
+      if (!Number.isFinite(parsed)) return qtyFor(product);
+      return Math.max(min, Math.min(parsed, max));
+    }
+
+    function updateBuyButton(product) {
+      const button = document.querySelector('[data-action="buy"]');
+      if (!button || !product || state.busy) return;
+      button.innerHTML = customEmoji("buy", "🛒") + "Buy · " + money(totalFor(product)) + " USDT";
+    }
+
+    function syncProductQtyInput() {
+      const product = state.product;
+      const input = byId("qtyInput");
+      if (!product || !input) return qtyFor(product);
+      const qty = clampQty(product, input.value);
+      state.qty.set(product.id, qty);
+      input.value = String(qty);
+      updateBuyButton(product);
+      return qty;
+    }
+
+    function productMedia(product, detail = false) {
+      const cls = detail ? "detail-media" : "product-media";
+      if (product?.imageUrl) {
+        return '<div class="' + cls + '"><img src="' + escapeHtml(product.imageUrl) + '" alt="" draggable="false" oncontextmenu="return false"></div>';
+      }
+      return '<div class="' + cls + '"><span>' + customEmoji(productEmojiKey(product), "📦", "solo") + '</span></div>';
+    }
+
+    function showToast(message, isError = false) {
+      const toast = byId("toast");
+      toast.textContent = message;
+      toast.style.borderColor = isError ? "rgba(255, 101, 106, .45)" : "rgba(160, 174, 188, .18)";
+      toast.classList.add("active");
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => toast.classList.remove("active"), 2600);
+    }
+
+    function setNotice(message, isError = false) {
+      const notice = byId("notice");
+      notice.textContent = message || "";
+      notice.hidden = !message;
+      notice.className = "notice" + (isError ? " error" : "");
+    }
+
+    function displayErrorMessage(error) {
+      const message = error instanceof Error ? error.message : String(error || "Action failed.");
+      if (/expired or revoked|invalid_grant|gmail token refresh|token.*expired|token.*revoked/i.test(message)) {
+        return "UPI payment verification is temporarily unavailable. Please try again later.";
+      }
+      return message;
+    }
+
+    function pageTitle() {
+      if (state.tab === "home") return state.bot.name || "Loguetown Shoppie";
+      if (state.tab === "shop") return "Shop";
+      if (state.tab === "orders") return "Orders";
+      if (state.tab === "wallet") return "Wallet";
+      if (state.tab === "me") return "Me";
+      if (state.tab === "liveSessions") return "Live Sessions";
+      return "Product";
+    }
+
+    function setTab(tab, options = {}) {
+      if (tab === "product" && options.product) {
+        state.product = options.product;
+      }
+      if (tab === "liveSessions" && !state.liveSessionsLoaded && !state.liveSessionsLoading) {
+        loadLiveSessions().catch((error) => {
+          state.liveSessionsLoaded = true;
+          state.liveSessionsLoading = false;
+          showToast(displayErrorMessage(error), true);
+          render();
+        });
+      }
+      if (tab !== "product") {
+        state.previousTab = tab;
+      }
+      state.tab = tab;
+      byId("pageTitle").textContent = pageTitle();
+      document.querySelectorAll(".screen").forEach((screen) => screen.classList.toggle("active", screen.id === tab));
+      document.querySelectorAll(".nav-btn").forEach((btn) => btn.classList.toggle("active", btn.dataset.tab === tab));
+      byId("backBtn").style.visibility = tab === "home" ? "hidden" : "visible";
+      render();
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
+
+    function topLevelProducts() {
+      return (state.products || []).filter((product) => !product.variantParentId);
+    }
+
+    function productVariants(product) {
+      const parentId = Number(product?.id || 0);
+      if (!parentId) return [];
+      return (state.products || []).filter((item) => Number(item.variantParentId || 0) === parentId);
+    }
+
+    function variantPriceSummary(product) {
+      const prices = productVariants(product)
+        .map((item) => Number(item.price || item.priceUsdt || 0))
+        .filter((value) => Number.isFinite(value) && value > 0);
+      if (!prices.length) return "Variants";
+      return "From " + money(Math.min(...prices)) + " USDT";
+    }
+
+    function productCard(product) {
+      const variants = productVariants(product);
+      const hasVariants = product.hasVariants || variants.length > 0;
+      const reseller = !hasVariants && product.usesResellerPrice ? '<span class="reseller-chip">Reseller</span>' : '';
+      const priceLabel = hasVariants ? variantPriceSummary(product) : escapeHtml(product.priceUsdt) + ' USDT';
+      const stockLabel = hasVariants
+        ? String(variants.length || product.variantCount || 0) + ' options'
+        : escapeHtml(product.stockLabel);
+      return '<article class="product-card" data-product-id="' + product.id + '" tabindex="0" role="button" aria-label="Open ' + escapeHtml(product.name) + '">' +
+        productMedia(product) +
+        '<div>' +
+          '<h3 class="product-name">' + customEmoji(productEmojiKey(product), "📦") + escapeHtml(product.name) + '</h3>' +
+          '<p class="product-desc">' + escapeHtml(product.description || "No product note") + '</p>' +
+          '<div class="row"><span class="price">' + priceLabel + '</span><span class="stock">' + stockLabel + '</span></div>' +
+          (reseller ? '<div class="row" style="margin-top:6px"><span class="detail-price-note">Retail ' + escapeHtml(product.retailPriceUsdt || product.priceUsdt) + ' USDT</span>' + reseller + '</div>' : '') +
+        '</div>' +
+        '<span class="product-open" aria-hidden="true">&rsaquo;</span>' +
+      '</article>';
+    }
+
+    function filteredProducts() {
+      const query = state.query.trim().toLowerCase();
+      const products = topLevelProducts();
+      if (!query) return products;
+      return products.filter((product) =>
+        product.name.toLowerCase().includes(query) ||
+        String(product.description || "").toLowerCase().includes(query) ||
+        productVariants(product).some((variant) =>
+          String(variant.name || "").toLowerCase().includes(query) ||
+          String(variant.variantLabel || "").toLowerCase().includes(query) ||
+          String(variant.description || "").toLowerCase().includes(query)
+        )
+      );
+    }
+
+    function renderHome() {
+      const featured = topLevelProducts().slice(0, 4);
+      byId("home").innerHTML =
+        '<section class="hero">' +
+          '<div class="brand-icon">' + logoHtml() + '</div>' +
+          '<p class="eyebrow">Welcome back,</p>' +
+          '<h2 class="hero-name">' + escapeHtml(displayName()) + '</h2>' +
+          '<div class="hero-balance"><strong>' + money(state.user.balanceUsdt) + '</strong><span>USDT</span></div>' +
+          '<div class="label">Wallet balance</div>' +
+          '<div class="hero-actions">' +
+            '<button class="btn ghost" type="button" data-action="deposit">' + customEmoji("deposit", "💰") + 'Deposit</button>' +
+            '<button class="btn ghost" type="button" data-action="tab" data-tab="shop">' + customEmoji("shop", "🛒") + 'Browse</button>' +
+          '</div>' +
+        '</section>' +
+        '<div class="label">Featured</div>' +
+        '<section class="product-list">' +
+          (featured.length ? featured.map(productCard).join("") : emptyHtml("No active products yet.")) +
+        '</section>';
+    }
+
+    function renderShop() {
+      const products = filteredProducts();
+      byId("shop").innerHTML =
+        '<input class="search" id="searchInput" type="search" autocomplete="off" placeholder="Search products..." value="' + escapeHtml(state.query) + '">' +
+        '<div class="filter-row"><button class="chip active" type="button">All</button></div>' +
+        '<section class="product-list">' +
+          (products.length ? products.map(productCard).join("") : emptyHtml("No matching products.")) +
+        '</section>';
+      byId("searchInput").addEventListener("input", (event) => {
+        state.query = event.target.value;
+        renderShop();
+        const input = byId("searchInput");
+        input.focus();
+        input.setSelectionRange(input.value.length, input.value.length);
+      });
+    }
+
+    function renderOrders() {
+      byId("orders").innerHTML =
+        '<div class="stack">' +
+          (state.orders.length ? state.orders.map(orderCard).join("") : emptyHtml("No orders yet. Buy a product and it will appear here.")) +
+        '</div>';
+    }
+
+    function orderCard(order) {
+      return '<button class="order-card order-click" type="button" data-order-id="' + escapeHtml(order.id) + '">' +
+        '<div class="row">' +
+          '<div class="order-title">' + escapeHtml(order.productName) + '</div>' +
+          '<div class="price">' + escapeHtml(order.amountUsdt) + ' USDT</div>' +
+        '</div>' +
+        '<div class="row">' +
+          '<div class="order-meta">Order ID# : ' + escapeHtml(order.ref) + '<br>Qty ' + escapeHtml(order.quantity) + ' &middot; ' + escapeHtml(formatDate(order.createdAt)) + '</div>' +
+          '<span class="order-status-wrap">' +
+            '<span class="status ' + escapeHtml(order.status) + '">' + escapeHtml(order.statusLabel) + '</span>' +
+            '<span class="order-open" aria-hidden="true">&rsaquo;</span>' +
+          '</span>' +
+        '</div>' +
+      '</button>';
+    }
+
+    function orderStatusNote(order) {
+      const status = String(order.status || "");
+      if ((order.items || []).length) return "Delivery details are shown below.";
+      if (status === "pending_payment") return "Payment is still pending for this order.";
+      if (status === "manual_pending") return "Payment is verified. Owner delivery is pending.";
+      if (status === "manual_accepted") return "Order accepted. Delivery is coming soon.";
+      if (status === "no_stock") return "Payment is verified, but stock is empty. Owner will resolve this order.";
+      if (status === "cancelled") return "This order was cancelled.";
+      if (status === "refunded") return "This order was refunded to your wallet.";
+      if (status === "delivered") return "Delivery details were sent in Telegram.";
+      return "Order details are available here.";
+    }
+
+    function prettyOrderStatus(status) {
+      const clean = String(status || "").replaceAll("_", " ").trim();
+      return clean ? clean.replace(/\b\w/g, (char) => char.toUpperCase()) : "Unknown";
+    }
+
+    function showOrderDetailsSheet(order) {
+      const items = Array.isArray(order.items) ? order.items : [];
+      const exactAmount = order.amountUniqueUsdt && order.amountUniqueUsdt !== order.amountUsdt
+        ? metricRow("Payment amount", order.amountUniqueUsdt + " USDT")
+        : "";
+      const coupon = order.couponCode
+        ? metricRow("Coupon", order.couponCode + " (-" + (order.couponDiscountUsdt || "0") + " USDT)")
+        : "";
+      const reference = order.txHash ? metricRow("Reference", order.txHash) : "";
+      const paid = order.paidAt ? metricRow("Paid", formatDate(order.paidAt)) : "";
+      const delivered = order.deliveredAt ? metricRow("Delivered", formatDate(order.deliveredAt)) : "";
+      const method = order.paymentMethodLabel || order.network || "-";
+      const received = items.length
+        ? '<div class="label">Received</div>' + deliveryItemsHtml(items)
+        : '<div class="detail-box order-detail-note">' + escapeHtml(orderStatusNote(order)) + '</div>';
+      openSheet(
+        '<div class="sheet-title"><span>Order Details</span><button class="icon-btn" type="button" data-action="closeSheet">' + customEmoji("close", "x", "solo") + '</button></div>' +
+        '<section class="delivery-card">' +
+          '<div class="delivery-title">' + escapeHtml(order.productName || "Order") + '</div>' +
+          '<section class="metric-card">' +
+            metricRow("Order ID# :", order.ref || ("#" + order.id)) +
+            metricRow("Status", order.statusLabel || prettyOrderStatus(order.status)) +
+            metricRow("Amount", (order.amountUsdt || "0") + " USDT") +
+            exactAmount +
+            metricRow("Quantity", String(order.quantity || 1)) +
+            metricRow("Method", method) +
+            metricRow("Created", formatDate(order.createdAt)) +
+            paid +
+            delivered +
+            coupon +
+            reference +
+          '</section>' +
+          received +
+        '</section>'
+      );
+    }
+
+    function renderWallet() {
+      byId("wallet").innerHTML =
+        '<section class="wallet-panel">' +
+          '<div class="label">Available balance</div>' +
+          '<div class="wallet-amount">' + money(state.user.balanceUsdt) + ' USDT</div>' +
+          '<div class="wallet-sub">Total deposited: ' + money(state.stats.totalDepositedUsdt) + ' USDT</div>' +
+        '</section>' +
+        '<div class="wallet-actions">' +
+          '<button class="btn full" type="button" data-action="deposit">' + customEmoji("deposit", "$") + 'Make a deposit</button>' +
+        '</div>' +
+        walletLiveHtml() +
+        '<div class="label">Recent deposits</div>' +
+        '<section class="stack">' +
+          (state.deposits.length ? state.deposits.map(depositCard).join("") : emptyHtml("No deposits yet.")) +
+        '</section>';
+    }
+
+    function walletTone(status, amount, reviewStage = "") {
+      const clean = String(status || "").toLowerCase();
+      const stage = String(reviewStage || "").toLowerCase();
+      const numericAmount = Number(amount || 0);
+      if (stage === "screenshot_needed" || stage === "manual_review" || stage === "verifying") return "pending";
+      if (clean.includes("pending") || clean.includes("review") || clean.includes("manual")) return "pending";
+      if (clean === "failed" || clean === "rejected" || clean === "cancelled" || clean === "canceled") return "rejected";
+      if (clean === "credited" || clean === "completed") return "credit";
+      if (numericAmount > 0) return "credit";
+      if (numericAmount < 0) return "debit";
+      return "neutral";
+    }
+
+    function signedWalletAmount(amount, tone) {
+      const value = String(amount || "0");
+      if (tone === "credit" && !value.startsWith("+") && value !== "0") return "+" + value;
+      if (tone === "debit" && !value.startsWith("-") && value !== "0") return "-" + value;
+      return value;
+    }
+
+    function depositIsLive(deposit) {
+      const status = String(deposit.status || "").toLowerCase();
+      const stage = String(deposit.reviewStage || "").toLowerCase();
+      return stage === "screenshot_needed" ||
+        stage === "manual_review" ||
+        stage === "verifying" ||
+        status.includes("pending") ||
+        status.includes("review") ||
+        status.includes("manual");
+    }
+
+    function liveDepositCount() {
+      return state.deposits.filter(depositIsLive).length;
+    }
+
+    function walletLiveHtml() {
+      const count = liveDepositCount();
+      if (!count) return "";
+      return '<div class="wallet-live">Live review active: ' + count + ' payment' + (count === 1 ? "" : "s") + ' will refresh here automatically.</div>';
+    }
+
+    function reviewStageLabel(deposit) {
+      const stage = String(deposit.reviewStage || "").toLowerCase();
+      if (stage === "screenshot_needed") return "Screenshot needed";
+      if (stage === "manual_review") return "Admin review";
+      if (stage === "manual_approved") return "Manual approved";
+      if (stage === "manual_expired") return "Review expired";
+      if (stage === "manual_rejected") return "Manual rejected";
+      if (stage === "manual_cancelled") return "Cancelled";
+      if (stage === "verifying") return "Verifying";
+      return "";
+    }
+
+    function depositProgressText(deposit) {
+      const stage = String(deposit.reviewStage || "").toLowerCase();
+      const status = String(deposit.status || "").toLowerCase();
+      if (stage === "screenshot_needed") return "Upload screenshot/video proof";
+      if (stage === "manual_review") return "Admin review in progress";
+      if (stage === "verifying" || status.includes("pending")) return "Waiting for verification";
+      return "";
+    }
+
+    function depositProgressPercent(deposit) {
+      const stage = String(deposit.reviewStage || "").toLowerCase();
+      const status = String(deposit.status || "").toLowerCase();
+      if (stage === "screenshot_needed") return 35;
+      if (stage === "manual_review") return 70;
+      if (stage === "verifying" || status.includes("pending")) return 45;
+      return 0;
+    }
+
+    function depositProgressHtml(deposit) {
+      if (!depositIsLive(deposit)) return "";
+      const percent = Math.max(8, Math.min(92, depositProgressPercent(deposit)));
+      return '<div class="deposit-progress">' +
+        '<div class="deposit-progress-track"><span class="deposit-progress-fill" style="width:' + percent + '%"></span></div>' +
+        '<div class="deposit-progress-meta"><span>' + escapeHtml(depositProgressText(deposit)) + '</span><b>' + percent + '%</b></div>' +
+      '</div>';
+    }
+
+    function canUploadReviewProof(deposit) {
+      const stage = String(deposit.reviewStage || "").toLowerCase();
+      const status = String(deposit.status || "").toLowerCase();
+      return (stage === "screenshot_needed" || stage === "manual_review") &&
+        (status.includes("pending") || status.includes("review"));
+    }
+
+    function reviewUploadHtml(deposit) {
+      if (!canUploadReviewProof(deposit)) return "";
+      return '<div class="review-upload">' +
+        '<div class="label">Upload proof</div>' +
+        '<input class="file-input" id="reviewProofFile" type="file" accept="image/*,video/*">' +
+        '<button class="btn full" type="button" data-action="uploadReviewProof" data-deposit-id="' + escapeHtml(deposit.id) + '">Upload screenshot / video</button>' +
+        '<p class="small">Photo or video under 20 MB. It goes directly to admin manual review.</p>' +
+      '</div>';
+    }
+
+    function depositCard(deposit) {
+      const tone = walletTone(deposit.status, deposit.amountUsdt, deposit.reviewStage);
+      const amount = escapeHtml(signedWalletAmount(deposit.amountUsdt, tone)) + " " + escapeHtml(deposit.asset);
+      const reference = deposit.reference ? '<br>Ref: ' + escapeHtml(deposit.reference) : "";
+      return '<button class="order-card order-click" type="button" data-deposit-id="' + escapeHtml(deposit.id) + '">' +
+        '<div class="row">' +
+          '<div class="order-title">' + escapeHtml(deposit.network) + '</div>' +
+          '<div class="price amount-state ' + escapeHtml(tone) + '">' + amount + '</div>' +
+        '</div>' +
+        '<div class="row">' +
+          '<div class="order-meta">' + escapeHtml(formatDate(deposit.createdAt)) + reference + '</div>' +
+          '<span class="order-status-wrap">' +
+            '<span class="status ' + escapeHtml(deposit.status) + '">' + escapeHtml(deposit.statusLabel) + '</span>' +
+            '<span class="order-open" aria-hidden="true">&rsaquo;</span>' +
+          '</span>' +
+        '</div>' +
+        depositProgressHtml(deposit) +
+      '</button>';
+    }
+
+    function depositStatusNote(deposit) {
+      const status = String(deposit.status || "").toLowerCase();
+      const stage = String(deposit.reviewStage || "").toLowerCase();
+      if (stage === "screenshot_needed") return "Upload payment proof here. This card will update after the screenshot/video is submitted.";
+      if (stage === "manual_review") return "Screenshot received. Admin review is in progress and this wallet page refreshes live.";
+      if (stage === "manual_approved") return "Manual review approved. Amount has been credited to your wallet.";
+      if (stage === "manual_expired") return "Manual review expired after 24 hours. Admin may have been busy or offline.";
+      if (stage === "manual_rejected") return "Manual review was rejected. No wallet balance was credited.";
+      if (stage === "manual_cancelled") return "Manual review was cancelled.";
+      if (status === "credited" || status === "completed") return "This deposit has been credited to your wallet.";
+      if (status.includes("pending") || status.includes("review") || status.includes("manual")) return "This deposit is waiting for verification or manual review.";
+      if (status === "failed" || status === "rejected" || status === "cancelled" || status === "canceled") return "This deposit was not credited. Check the reference and try again if needed.";
+      return "Deposit details are shown here.";
+    }
+
+    function showDepositDetailsSheet(deposit) {
+      const tone = walletTone(deposit.status, deposit.amountUsdt, deposit.reviewStage);
+      const amount = signedWalletAmount(deposit.amountUsdt, tone) + " " + (deposit.asset || "USDT");
+      const uniqueAmount = deposit.amountUniqueUsdt && deposit.amountUniqueUsdt !== deposit.amountUsdt
+        ? metricRow("Payment amount", deposit.amountUniqueUsdt + " USDT")
+        : "";
+      const reference = deposit.externalReference ? metricRow("Reference", deposit.externalReference) : "";
+      const txHash = deposit.txHash && deposit.txHash !== deposit.externalReference ? metricRow("TX / Hash", deposit.txHash) : "";
+      const source = deposit.source ? metricRow("Source", deposit.source) : "";
+      const expires = deposit.expiresAt ? metricRow("Expires", formatDate(deposit.expiresAt)) : "";
+      const reviewStage = deposit.reviewStage ? metricRow("Review stage", reviewStageLabel(deposit)) : "";
+      openSheet(
+        '<div class="sheet-title"><span>Deposit Details</span><button class="icon-btn" type="button" data-action="closeSheet">' + customEmoji("close", "x", "solo") + '</button></div>' +
+        '<section class="delivery-card">' +
+          '<div class="delivery-title">' + escapeHtml(deposit.network || "Deposit") + '</div>' +
+          '<section class="metric-card">' +
+            metricRow("Deposit ID", "#" + String(deposit.id || "-")) +
+            metricRow("Status", deposit.statusLabel || prettyOrderStatus(deposit.status)) +
+            metricRow("Amount", amount) +
+            uniqueAmount +
+            metricRow("Asset", deposit.asset || "USDT") +
+            metricRow("Method", deposit.network || "-") +
+            metricRow("Created", formatDate(deposit.createdAt)) +
+            expires +
+            reviewStage +
+            reference +
+            txHash +
+            source +
+          '</section>' +
+          depositProgressHtml(deposit) +
+          reviewUploadHtml(deposit) +
+          '<div class="detail-box order-detail-note">' + escapeHtml(depositStatusNote(deposit)) + '</div>' +
+        '</section>'
+      );
+    }
+
+    function transactionCard(tx) {
+      const direction = tx.direction || "neutral";
+      const reference = tx.reference ? '<br>Ref: ' + escapeHtml(tx.reference) : "";
+      return '<article class="transaction-card">' +
+        '<div class="row">' +
+          '<div class="order-title">' + escapeHtml(tx.label || tx.kind || "Wallet update") + '</div>' +
+          '<div class="tx-amount ' + escapeHtml(direction) + '">' + escapeHtml(tx.signedAmountUsdt || "0 USDT") + '</div>' +
+        '</div>' +
+        '<div class="order-meta">' + escapeHtml(formatDate(tx.createdAt)) + reference + '</div>' +
+      '</article>';
+    }
+
+    function renderMe() {
+      byId("me").innerHTML =
+        '<section class="profile">' +
+          '<div class="profile-head">' +
+            '<div class="avatar">' + logoHtml() + '</div>' +
+            '<div class="profile-main"><div class="profile-name-line"><div class="profile-name">' + escapeHtml(displayName()) + '</div>' + roleBadge() + '</div>' +
+            '<div class="small">' + (state.user.username ? "@" + escapeHtml(state.user.username) : "Telegram user") + '</div></div>' +
+          '</div>' +
+        '</section>' +
+        '<section class="metric-card">' +
+          metricRow("Balance", money(state.user.balanceUsdt) + " USDT") +
+          metricRow("Total deposited", money(state.stats.totalDepositedUsdt) + " USDT") +
+          metricRow("Orders", String(state.stats.ordersCount || state.orders.length)) +
+          metricRow("Deposits", String(state.stats.depositsCount || state.deposits.length)) +
+          metricRow("Transactions", String(state.stats.transactionsCount || state.transactions.length)) +
+          metricRow("User ID", "#" + escapeHtml(state.user.id || "-")) +
+        '</section>' +
+        '<div class="label">Activity</div>' +
+        '<section class="action-card">' +
+          actionRow("My deposits", "wallet") +
+          actionRow("LIVE SESSIONS", "liveSessions", String(state.stats.liveSessionsCount || 0)) +
+          actionRow("Transactions", "transactions") +
+        '</section>' +
+        '<div class="label">Actions</div>' +
+        '<section class="action-card">' +
+          actionRow("Message owner", "support") +
+          actionRow("Open bot", "openBot") +
+        '</section>';
+    }
+
+    function liveSessionCard(session) {
+      const status = String(session.status || "closed").toLowerCase();
+      const closedBy = session.closedBy && session.closedBy !== "-" ? "Closed by " + session.closedBy : "Closed";
+      const download = session.canDownload
+        ? '<button class="btn secondary full" type="button" data-action="downloadLiveSession" data-session-id="' + escapeHtml(session.id) + '">Download chat summary</button>'
+        : '<button class="btn secondary full" type="button" disabled>No transcript file</button>';
+      return '<article class="session-card">' +
+        '<div class="session-head">' +
+          '<div><div class="session-subject">' + escapeHtml(session.subject || "Live Support") + '</div>' +
+          '<div class="session-meta">' +
+            '<span>Date: ' + escapeHtml(formatDate(session.startedAt)) + '</span>' +
+            '<span>Duration: ' + escapeHtml(session.durationLabel || "0s") + '</span>' +
+            '<span>Messages: ' + escapeHtml(session.messageCount || 0) + '</span>' +
+          '</div></div>' +
+          '<span class="status ' + escapeHtml(status) + '">' + escapeHtml(closedBy) + '</span>' +
+        '</div>' +
+        '<div class="session-actions">' + download + '</div>' +
+      '</article>';
+    }
+
+    function renderLiveSessions() {
+      if (state.liveSessionsLoading) {
+        byId("liveSessions").innerHTML = '<div class="skeleton"></div><br><div class="skeleton"></div>';
+        return;
+      }
+      const sessions = state.liveSessions || [];
+      byId("liveSessions").innerHTML =
+        '<div class="label">Live session history</div>' +
+        '<section class="stack">' +
+          (sessions.length ? sessions.map(liveSessionCard).join("") : emptyHtml("No live sessions recorded yet.")) +
+        '</section>' +
+        '<button class="btn secondary full" type="button" data-action="refreshLiveSessions" style="margin-top:12px">Refresh sessions</button>';
+    }
+
+    function renderProduct() {
+      const product = state.product;
+      if (!product) {
+        byId("product").innerHTML = emptyHtml("Product not found.");
+        return;
+      }
+      const variants = productVariants(product);
+      if (product.hasVariants || variants.length > 0) {
+        byId("product").innerHTML =
+          productMedia(product, true) +
+          '<h1 class="detail-title">' + customEmoji(productEmojiKey(product), "box") + escapeHtml(product.name) + '</h1>' +
+          '<div class="stock">' + escapeHtml(String(variants.length || product.variantCount || 0)) + ' options available</div>' +
+          '<div class="label">Description</div>' +
+          '<div class="detail-box">' + escapeHtml(product.description || "Choose one option below.") + '</div>' +
+          '<div class="label">Variants</div>' +
+          '<section class="product-list">' +
+            (variants.length ? variants.map(productCard).join("") : emptyHtml("No active variants yet.")) +
+          '</section>';
+        return;
+      }
+      const qty = qtyFor(product);
+      const total = totalFor(product);
+      const priceNote = product.usesResellerPrice
+        ? '<div class="detail-price-note">Reseller price. Retail ' + escapeHtml(product.retailPriceUsdt || product.priceUsdt) + ' USDT</div>'
+        : '';
+      byId("product").innerHTML =
+        productMedia(product, true) +
+        '<h1 class="detail-title">' + customEmoji(productEmojiKey(product), "📦") + escapeHtml(product.name) + '</h1>' +
+        '<div class="detail-price">' + money(product.price) + ' USDT</div>' +
+        priceNote +
+        '<div class="stock">' + escapeHtml(product.stockLabel) + '</div>' +
+        '<div class="detail-grid">' +
+          miniStat("Type", product.fulfillmentType === "manual" ? "Manual" : "Auto") +
+          miniStat("Limit", product.limitLabel) +
+        '</div>' +
+        '<div class="label">Description</div>' +
+        '<div class="detail-box">' + escapeHtml(product.description || "No product note") + '</div>' +
+        '<div class="label">Quantity</div>' +
+        '<div class="qty">' +
+          '<button type="button" data-action="qtyDec" ' + (qty <= product.minQty ? "disabled" : "") + '>-</button>' +
+          '<input id="qtyInput" type="number" inputmode="numeric" pattern="[0-9]*" min="' + escapeHtml(product.minQty) + '" max="' + escapeHtml(product.maxQty) + '" value="' + qty + '" data-action="qtyInput" aria-label="Quantity">' +
+          '<button type="button" data-action="qtyInc" ' + (qty >= product.maxQty ? "disabled" : "") + '>+</button>' +
+        '</div>' +
+        '<button class="btn full sticky-buy" type="button" data-action="buy" ' + (!product.canOrder || state.busy ? "disabled" : "") + '>' +
+          (state.busy ? "Processing..." : customEmoji("buy", "🛒") + "Buy · " + money(total) + " USDT") +
+        '</button>';
+    }
+
+    function metricRow(label, value) {
+      return '<div class="metric-row"><strong>' + escapeHtml(label) + '</strong><span>' + escapeHtml(value) + '</span></div>';
+    }
+
+    function actionRow(label, action, meta) {
+      const prefix = action === "support" ? customEmoji("support", "") : "";
+      const right = meta === undefined
+        ? '&rsaquo;'
+        : '<span class="action-meta-value">' + escapeHtml(meta) + '</span><span>&rsaquo;</span>';
+      return '<button class="action-item" type="button" data-action="' + escapeHtml(action) + '"><strong>' + prefix + escapeHtml(label) + '</strong><span class="action-meta">' + right + '</span></button>';
+    }
+
+    function roleBadge() {
+      const rawRole = String(state.user.role || "user").toLowerCase();
+      const role = rawRole === "owner" || rawRole === "admin" ? rawRole : "user";
+      const sourceTags = Array.isArray(state.user.roleTags) ? state.user.roleTags : [];
+      const hasReseller = Boolean(state.user.isReseller) || sourceTags.some((tag) => String(tag?.role || "").toLowerCase() === "reseller");
+      const tags = [];
+      if (hasReseller) tags.push({ role: "reseller", label: "Reseller" });
+      if (role === "owner") tags.push({ role: "owner", label: "Owner" });
+      else if (role === "admin") tags.push({ role: "admin", label: "Admin" });
+      if (!tags.length) tags.push({ role: "user", label: state.user.roleLabel || "User" });
+      return '<span class="role-badges">' + tags.map((tag) =>
+        '<span class="role-badge ' + escapeHtml(tag.role) + '">' + escapeHtml(tag.label) + '</span>'
+      ).join("") + '</span>';
+    }
+
+    function miniStat(label, value) {
+      return '<div class="mini-stat"><span>' + escapeHtml(label) + '</span><strong>' + escapeHtml(value) + '</strong></div>';
+    }
+
+    function emptyHtml(text) {
+      return '<div class="empty">' + escapeHtml(text) + '</div>';
+    }
+
+    function displayName() {
+      return state.user.username || tg?.initDataUnsafe?.user?.first_name || "Customer";
+    }
+
+    function render() {
+      if (!state.ready) return;
+      if (state.tab === "home") renderHome();
+      if (state.tab === "shop") renderShop();
+      if (state.tab === "orders") renderOrders();
+      if (state.tab === "wallet") renderWallet();
+      if (state.tab === "me") renderMe();
+      if (state.tab === "liveSessions") renderLiveSessions();
+      if (state.tab === "product") renderProduct();
+    }
+
+    function loading() {
+      byId("home").innerHTML = '<div class="skeleton"></div><br><div class="skeleton"></div><br><div class="skeleton"></div>';
+    }
+
+    function enableCloseWarning() {
+      if (enableCloseWarning.enabled) return;
+      enableCloseWarning.enabled = true;
+      try {
+        tg?.enableClosingConfirmation?.();
+      } catch {}
+    }
+
+    async function loadShop() {
+      hideAppShell();
+      setNotice("");
+      if (!tg?.initData) {
+        state.ready = true;
+        loading();
+        setNotice("Open this app from Telegram to load your shop account.", true);
+        showAppShell();
+        return;
+      }
+      enableCloseWarning();
+      tg.expand();
+      tg.disableVerticalSwipes?.();
+      loading();
+      const response = await fetch(API_BASE + "/api/bootstrap", { headers: authHeader() });
+      const payload = await response.json();
+      if (!response.ok || !payload.ok) {
+        throw new Error(payload.error || "Shop could not be loaded.");
+      }
+      state.bot = payload.bot || state.bot;
+      state.user = payload.user || state.user;
+      state.stats = payload.stats || state.stats;
+      state.products = payload.products || [];
+      state.orders = payload.orders || [];
+      state.deposits = payload.deposits || [];
+      state.transactions = payload.transactions || [];
+      state.depositMethods = payload.depositMethods || [];
+      state.customEmojiIds = payload.customEmojiIds || {};
+      state.customEmojiUrls = payload.customEmojiUrls || {};
+      await preloadCustomEmojis();
+      if (!methodById(state.depositMethod) && state.depositMethods[0]) state.depositMethod = state.depositMethods[0].id;
+      state.ready = true;
+      byId("pageTitle").textContent = pageTitle();
+      syncBrandLogo();
+      renderNavIcons();
+      render();
+      showAppShell();
+    }
+
+    async function postAction(path, body = {}) {
+      const response = await fetch(API_BASE + path, {
+        method: "POST",
+        headers: { ...authHeader(), "content-type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      const payload = await response.json();
+      if (!response.ok || !payload.ok) {
+        throw new Error(payload.error || "Action failed.");
+      }
+      return payload;
+    }
+
+    async function loadLiveSessions(force = false) {
+      if (state.liveSessionsLoading) return;
+      if (state.liveSessionsLoaded && !force) return;
+      state.liveSessionsLoading = true;
+      render();
+      try {
+        const response = await fetch(API_BASE + "/api/live-sessions", {
+          headers: authHeader(),
+          cache: "no-store",
+        });
+        const payload = await response.json();
+        if (!response.ok || !payload.ok) throw new Error(payload.error || "Could not load live sessions.");
+        state.liveSessions = payload.sessions || [];
+        if (payload.stats?.liveSessionsCount !== undefined) {
+          state.stats.liveSessionsCount = payload.stats.liveSessionsCount;
+        }
+        state.liveSessionsLoaded = true;
+      } finally {
+        state.liveSessionsLoading = false;
+        render();
+      }
+    }
+
+    async function downloadLiveSession(sessionId) {
+      if (!sessionId) return;
+      try {
+        const payload = await postAction("/api/live-sessions/download", { sessionId });
+        const blob = new Blob([payload.text || ""], { type: "text/plain;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = payload.fileName || "live-support-transcript.txt";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        tg?.HapticFeedback?.notificationOccurred?.("success");
+        showToast("Transcript download started.");
+      } catch (error) {
+        tg?.HapticFeedback?.notificationOccurred?.("error");
+        showToast(displayErrorMessage(error), true);
+      }
+    }
+
+    function applyStatePayload(payload) {
+      if (payload.bot) state.bot = payload.bot;
+      if (payload.user) state.user = payload.user;
+      if (payload.balanceUsdt !== undefined) state.user.balanceUsdt = payload.balanceUsdt;
+      if (payload.totalDepositedUsdt !== undefined) state.stats.totalDepositedUsdt = payload.totalDepositedUsdt;
+      if (payload.stats) state.stats = payload.stats;
+      if (payload.products) state.products = payload.products;
+      if (payload.orders) state.orders = payload.orders;
+      if (payload.deposits) state.deposits = payload.deposits;
+      if (payload.transactions) state.transactions = payload.transactions;
+      if (payload.depositMethods) state.depositMethods = payload.depositMethods;
+      if (payload.customEmojiIds) state.customEmojiIds = payload.customEmojiIds;
+      if (payload.customEmojiUrls) state.customEmojiUrls = payload.customEmojiUrls;
+      void preloadCustomEmojis().then(() => {
+        renderNavIcons();
+        render();
+      });
+      if (state.product) {
+        state.product = state.products.find((item) => item.id === state.product.id) || state.product;
+      }
+    }
+
+    async function refreshLiveState() {
+      if (!state.ready || state.liveRefreshInFlight || !tg?.initData) return;
+      state.liveRefreshInFlight = true;
+      try {
+        const response = await fetch(API_BASE + "/api/bootstrap", {
+          headers: authHeader(),
+          cache: "no-store",
+        });
+        const payload = await response.json();
+        if (!response.ok || !payload.ok) throw new Error(payload.error || "Refresh failed.");
+        applyStatePayload(payload);
+        syncBrandLogo();
+      } catch (error) {
+        console.warn("live refresh failed", error);
+      } finally {
+        state.liveRefreshInFlight = false;
+      }
+    }
+
+    function orderPaymentMethods() {
+      return state.depositMethods.concat([{ id: "other", label: "Other Payment Methods", iconKey: "otherPayment" }]);
+    }
+
+    function upiQrUrl(noteCode = "", amountInr = "") {
+      const params = new URLSearchParams();
+      if (noteCode) params.set("note", noteCode);
+      if (amountInr) params.set("amount", amountInr);
+      const suffix = params.toString();
+      return API_BASE + "/api/upi-qr" + (suffix ? "?" + suffix : "");
+    }
+
+    function checkoutSummaryHtml(checkout) {
+      const couponLine = checkout.coupon
+        ? metricRow("Coupon", checkout.coupon.code + " (-" + checkout.discountUsdt + " USDT)")
+        : "";
+      return '<section class="metric-card">' +
+        metricRow("Product", checkout.product.name) +
+        metricRow("Qty", String(checkout.qty)) +
+        metricRow("Price", checkout.unitPayableUsdt + " USDT") +
+        metricRow("Subtotal", checkout.subtotalUsdt + " USDT") +
+        couponLine +
+        metricRow("Total", checkout.totalUsdt + " USDT") +
+        metricRow("Wallet Balance", checkout.walletBalanceUsdt + " Credits") +
+      '</section>';
+    }
+
+    function deliverySummaryRow(label, value) {
+      return '<div class="delivery-summary-row"><strong>' + escapeHtml(label) + '</strong><span>' + escapeHtml(value || "-") + '</span></div>';
+    }
+
+    function linkifyDeliveryItem(item) {
+      const raw = String(item || "");
+      const urlPattern = /https?:\/\/[^\s<>"']+/g;
+      let html = "";
+      let lastIndex = 0;
+      let linkCount = 0;
+      raw.replace(urlPattern, (match, offset) => {
+        html += escapeHtml(raw.slice(lastIndex, offset));
+        linkCount += 1;
+        html += '<a class="delivery-link" href="' + escapeHtml(match) + '" data-open-url="' + escapeHtml(match) + '" target="_blank" rel="noopener noreferrer">' +
+          '<strong>Open link ' + String(linkCount) + '</strong>' + escapeHtml(match) +
+        '</a>';
+        lastIndex = offset + match.length;
+        return match;
+      });
+      html += escapeHtml(raw.slice(lastIndex));
+      return html || escapeHtml(raw);
+    }
+
+    function deliveryItemsHtml(items) {
+      if (!items || !items.length) {
+        return '<p class="small">Delivery details were sent in Telegram.</p>';
+      }
+      return '<div class="delivery-items">' + items.map((item, index) =>
+        '<div>' +
+          (items.length > 1 ? '<div class="delivery-item-index">#' + String(index + 1) + '</div>' : "") +
+          '<pre class="delivery-item">' + linkifyDeliveryItem(item) + '</pre>' +
+        '</div>'
+      ).join("") + '</div>';
+    }
+
+    function processingSheetHtml(title, productName, qty) {
+      return '<div class="sheet-title"><span>' + escapeHtml(title) + '</span><button class="icon-btn" type="button" data-action="closeSheet">' + customEmoji("close", "x", "solo") + '</button></div>' +
+        '<section class="delivery-card">' +
+          '<div class="delivery-title">Processing</div>' +
+          '<div class="delivery-steps">' +
+            '<div class="delivery-step"><strong>Payment</strong><span>Confirming payment...</span></div>' +
+            '<div class="delivery-step"><strong>Delivery</strong><span>Preparing your order...</span></div>' +
+          '</div>' +
+          '<div class="delivery-summary">' +
+            deliverySummaryRow("Product", productName) +
+            deliverySummaryRow("Quantity", String(qty || 1)) +
+          '</div>' +
+        '</section>';
+    }
+
+    function depositVerifySheetHtml(methodLabel, percent, message) {
+      const safePercent = Math.max(5, Math.min(92, Math.floor(percent || 0)));
+      return '<div class="sheet-title"><span>Verifying Deposit</span></div>' +
+        '<section class="verify-card" aria-live="polite">' +
+          '<div class="verify-head"><div><div class="delivery-title">Live payment check</div><div class="small">' + escapeHtml(methodLabel || "Payment") + '</div></div><div class="verify-orbit" aria-hidden="true"></div></div>' +
+          '<div class="verify-progress-track"><span id="verifyProgressFill" class="verify-progress-fill" style="width:' + safePercent + '%"></span></div>' +
+          '<div class="verify-progress-meta"><span id="verifyProgressText">' + escapeHtml(message || "Starting verification...") + '</span><b id="verifyProgressPct">' + safePercent + '%</b></div>' +
+          '<p class="small">Keep this window open. If auto-check cannot confirm it, the request moves to manual review.</p>' +
+        '</section>';
+    }
+
+    function updateDepositVerifyProgress(percent, message) {
+      const safePercent = Math.max(5, Math.min(92, Math.floor(percent || 0)));
+      const fill = byId("verifyProgressFill");
+      const pct = byId("verifyProgressPct");
+      const text = byId("verifyProgressText");
+      if (fill) fill.style.width = safePercent + "%";
+      if (pct) pct.textContent = safePercent + "%";
+      if (text && message) text.textContent = message;
+    }
+
+    function startDepositVerifyProgress(method) {
+      clearInterval(depositVerifyTimer);
+      depositVerifyPercent = 8;
+      const methodLabel = method?.label || "Payment";
+      const messages = [
+        "Checking payment details...",
+        "Reading reference...",
+        "Matching amount...",
+        "Confirming wallet update...",
+        "Almost done..."
+      ];
+      openSheet(depositVerifySheetHtml(methodLabel, depositVerifyPercent, messages[0]));
+      let step = 0;
+      depositVerifyTimer = setInterval(() => {
+        step += 1;
+        depositVerifyPercent = Math.min(88, depositVerifyPercent + (step < 3 ? 14 : 7));
+        updateDepositVerifyProgress(depositVerifyPercent, messages[Math.min(messages.length - 1, step)]);
+      }, 760);
+    }
+
+    function stopDepositVerifyProgress() {
+      clearInterval(depositVerifyTimer);
+      depositVerifyTimer = 0;
+    }
+
+    function deliveryResultHtml(payload) {
+      const delivery = payload?.delivery || {};
+      const status = delivery.status || "";
+      const title = delivery.title || (status === "delivered" ? "Order Delivered!" : "Order Status");
+      const isDelivered = status === "delivered";
+      const isManual = status === "manual_pending";
+      const steps = isDelivered
+        ? '<div class="delivery-steps">' +
+            '<div class="delivery-step"><strong>Payment</strong><span>Payment Verified!</span></div>' +
+            '<div class="delivery-step"><strong>Processing</strong><span>Delivering your order...</span></div>' +
+            '<div class="delivery-step"><strong>Delivery</strong><span>Order Delivered!</span></div>' +
+          '</div>'
+        : isManual
+          ? '<div class="delivery-steps">' +
+              '<div class="delivery-step"><strong>Payment</strong><span>Payment Verified!</span></div>' +
+              '<div class="delivery-step"><strong>Delivery</strong><span>Waiting for owner delivery.</span></div>' +
+            '</div>'
+          : '<div class="delivery-steps">' +
+              '<div class="delivery-step"><strong>Status</strong><span>' + escapeHtml(delivery.message || payload?.message || "Order status updated.") + '</span></div>' +
+            '</div>';
+      const summary = delivery.orderRef
+        ? '<div class="delivery-summary">' +
+            deliverySummaryRow("Order ID# :", delivery.orderRef) +
+            deliverySummaryRow("Product", delivery.productName) +
+            deliverySummaryRow("Quantity", String(delivery.quantity || 1)) +
+            deliverySummaryRow("Total Paid", (delivery.totalPaidUsdt || "0") + " USDT") +
+          '</div>'
+        : "";
+      const items = isDelivered
+        ? '<div class="label">Items</div>' + deliveryItemsHtml(delivery.items || [])
+        : '<p class="small">' + escapeHtml(delivery.message || payload?.message || "Order details were sent in Telegram.") + '</p>';
+      const footer = isDelivered
+        ? '<p class="small">' + escapeHtml(delivery.message || payload?.message || "Delivery details were also sent in Telegram.") + '</p>'
+        : "";
+      return '<div class="sheet-title"><span>' + escapeHtml(title) + '</span><button class="icon-btn" type="button" data-action="closeSheet">' + customEmoji("close", "x", "solo") + '</button></div>' +
+        '<section class="delivery-card">' +
+          '<div class="delivery-title">' + escapeHtml(title) + '</div>' +
+          steps +
+          summary +
+          items +
+          footer +
+        '</section>' +
+        '<button class="btn full" type="button" data-action="closeSheet">Close</button>';
+    }
+
+    function showActionErrorSheet(title, message) {
+      openSheet(
+        '<div class="sheet-title"><span>' + escapeHtml(title) + '</span><button class="icon-btn" type="button" data-action="closeSheet">' + customEmoji("close", "x", "solo") + '</button></div>' +
+        '<p class="notice error">' + escapeHtml(message) + '</p>' +
+        '<button class="btn full" type="button" data-action="closeSheet">Close</button>'
+      );
+    }
+
+    function showCouponPromptSheet() {
+      openSheet(
+        '<div class="sheet-title"><span>Do you have a coupon?</span><button class="icon-btn" type="button" data-action="closeSheet">' + customEmoji("close", "x", "solo") + '</button></div>' +
+        '<p class="small">Apply a coupon first, or continue without one to review your order summary.</p>' +
+        '<div class="two-actions">' +
+          '<button class="btn secondary" type="button" data-action="enterCoupon">Enter Coupon</button>' +
+          '<button class="btn full" type="button" data-action="continueNoCoupon">Continue without</button>' +
+        '</div>'
+      );
+    }
+
+    function showCouponEntrySheet(couponCode = "") {
+      openSheet(
+        '<div class="sheet-title"><span>Enter Coupon</span><button class="icon-btn" type="button" data-action="closeSheet">' + customEmoji("close", "x", "solo") + '</button></div>' +
+        '<label class="form-field"><span>Coupon code</span><input class="input" id="couponCodeInput" autocomplete="off" placeholder="Enter coupon code" value="' + escapeHtml(couponCode) + '"></label>' +
+        '<div class="two-actions">' +
+          '<button class="btn full" type="button" data-action="applyCouponFromPrompt">Apply Coupon</button>' +
+          '<button class="btn secondary" type="button" data-action="continueNoCoupon">Continue without</button>' +
+        '</div>'
+      );
+    }
+
+    async function showCheckoutSheet(couponCode = "") {
+      const product = state.product;
+      if (!product) return;
+      syncProductQtyInput();
+      openSheet('<div class="sheet-title"><span>Checkout</span><button class="icon-btn" type="button" data-action="closeSheet">' + customEmoji("close", "x", "solo") + '</button></div><p class="small">Loading checkout...</p>');
+      try {
+        const payload = await postAction("/api/checkout/preview", {
+          productId: product.id,
+          qty: qtyFor(product),
+          couponCode,
+        });
+        renderCheckoutSheet(payload.checkout, couponCode);
+      } catch (error) {
+        renderCheckoutSheet(null, couponCode, error instanceof Error ? error.message : String(error));
+      }
+    }
+
+    function renderCheckoutSheet(checkout, couponCode = "", error = "") {
+      const product = state.product;
+      if (!product) return;
+      const paymentDisabled = checkout ? "" : " disabled";
+      const methodButtons = orderPaymentMethods().map((method) =>
+        '<button class="pay-option" type="button" data-action="startOrderPayment" data-method="' + escapeHtml(method.id) + '" data-coupon="' + escapeHtml(couponCode) + '"' + paymentDisabled + '>' +
+          '<span>' + customEmoji(method.iconKey || "wallet", "$") + escapeHtml(method.label) + '</span>' +
+        '</button>'
+      ).join("");
+      const walletDisabled = (!checkout || !checkout.walletCanPay) ? " disabled" : "";
+      const walletText = checkout?.walletCanPay ? "Wallet Pay" : "Insufficient Balance";
+      const canPayDirectly = !!checkout && !checkout.walletCanPay;
+      const directPaymentHtml = canPayDirectly
+        ? '<button class="btn secondary full" type="button" data-action="deposit">' + customEmoji("deposit", "$") + 'Deposit first</button>' +
+          '<div class="label">Pay Directly</div>' +
+          '<div class="deposit-methods">' + methodButtons + '</div>'
+        : "";
+      openSheet(
+        '<div class="sheet-title"><span>Checkout</span><button class="icon-btn" type="button" data-action="closeSheet">' + customEmoji("close", "x", "solo") + '</button></div>' +
+        (checkout ? checkoutSummaryHtml(checkout) : "") +
+        (error ? '<p class="notice error">' + escapeHtml(error) + '</p>' : "") +
+        '<button class="btn secondary full" type="button" data-action="changeCoupon" data-coupon="' + escapeHtml(couponCode) + '">' + (couponCode ? "Change Coupon" : "Add Coupon") + '</button>' +
+        '<div class="label">Wallet</div>' +
+        '<button class="btn full" type="button" data-action="payWallet" data-coupon="' + escapeHtml(couponCode) + '"' + walletDisabled + '>' + customEmoji("wallet", "$") + walletText + '</button>' +
+        directPaymentHtml
+      );
+    }
+
+    async function payWalletFromSheet(couponCode = "") {
+      const product = state.product;
+      if (!product || state.busy) return;
+      syncProductQtyInput();
+      const qty = qtyFor(product);
+      state.busy = true;
+      try {
+        openSheet(processingSheetHtml("Wallet Pay", product.name, qty));
+        const payload = await postAction("/api/buy", { productId: product.id, qty, couponCode });
+        applyStatePayload(payload);
+        render();
+        tg?.HapticFeedback?.notificationOccurred?.("success");
+        openSheet(deliveryResultHtml(payload));
+        showToast(payload.delivery?.message || payload.message || "Order Delivered.");
+      } catch (error) {
+        tg?.HapticFeedback?.notificationOccurred?.("error");
+        const message = displayErrorMessage(error);
+        showActionErrorSheet("Wallet Pay Failed", message);
+        showToast(message, true);
+      } finally {
+        state.busy = false;
+        render();
+      }
+    }
+
+    async function startOrderPaymentFromSheet(method, couponCode = "") {
+      const product = state.product;
+      if (!product || state.busy) return;
+      syncProductQtyInput();
+      state.busy = true;
+      try {
+        const payload = await postAction("/api/order/start", {
+          productId: product.id,
+          qty: qtyFor(product),
+          couponCode,
+          method,
+        });
+        if (payload.payment) {
+          showOrderPaymentSheet(payload.payment);
+        } else {
+          applyStatePayload(payload);
+          closeSheet();
+          render();
+          showToast(payload.message || "Order request created.");
+        }
+      } catch (error) {
+        showToast(displayErrorMessage(error), true);
+      } finally {
+        state.busy = false;
+        render();
+      }
+    }
+
+    function showOrderPaymentSheet(payment) {
+      const addressBlock = payment.address
+        ? '<label class="form-field"><span>' + escapeHtml(payment.addressLabel || "Send to") + '</span>' +
+            '<div class="copy-box"><div class="copy-value">' + escapeHtml(payment.address) + '</div>' +
+            '<button class="copy-btn" type="button" data-action="copyDepositValue" data-copy="' + escapeHtml(payment.address) + '">Copy</button></div>' +
+          '</label>'
+        : "";
+      const paymentQrUrl = payment.id === "upi" ? upiQrUrl(payment.noteCode || payment.referenceValue || "", payment.expectedInr || "") : payment.qrImageUrl;
+      const qrBlock = paymentQrUrl
+        ? '<div class="qr-box ' + (payment.id === "upi" ? "upi" : "") + '"><img src="' + escapeHtml(paymentQrUrl) + '" alt=""><div><strong>' + (payment.id === "upi" ? "Scan UPI QR" : "Scan QR or use UPI ID") + '</strong><div class="small">' + escapeHtml(payment.rateLabel || "") + '</div></div></div>'
+        : "";
+      const noteBlock = payment.noteCode
+        ? '<label class="form-field"><span>Payment note code</span>' +
+            '<div class="copy-box"><div class="copy-value">' + escapeHtml(payment.noteCode) + '</div>' +
+            '<button class="copy-btn" type="button" data-action="copyDepositValue" data-copy="' + escapeHtml(payment.noteCode) + '">Copy</button></div>' +
+          '</label>'
+        : "";
+      const referenceAttrs = (payment.readonlyReference ? " readonly" : "") +
+        (payment.referenceValue ? ' value="' + escapeHtml(payment.referenceValue) + '"' : "");
+      const orderAmountInput = payment.id === "upi"
+        ? '<label class="form-field"><span>Amount (INR)</span><input class="input" id="orderPaymentAmount" inputmode="decimal" autocomplete="off" placeholder="INR amount you sent"></label>'
+        : "";
+      const orderReferenceInput = '<label class="form-field"><span>' + escapeHtml(payment.referenceLabel || "Transaction ID / Hash") + '</span><input class="input" id="orderPaymentRef" autocomplete="off" placeholder="' + escapeHtml(payment.placeholder || "Paste payment reference") + '"' + referenceAttrs + '></label>';
+      openSheet(
+        '<div class="sheet-title"><span>' + customEmoji(payment.iconKey || "wallet", "$") + escapeHtml(payment.label) + '</span><button class="icon-btn" type="button" data-action="closeSheet">' + customEmoji("close", "x", "solo") + '</button></div>' +
+        '<section class="metric-card">' +
+          metricRow("Order ID# :", payment.orderRef) +
+          metricRow("Amount", payment.amountUsdt + " USDT") +
+          (payment.expectedInr ? metricRow("INR Amount", payment.expectedInr) : "") +
+        '</section>' +
+        qrBlock +
+        addressBlock +
+        noteBlock +
+        orderAmountInput +
+        orderReferenceInput +
+        '<p class="small">' + escapeHtml(payment.note || "Pay first, then verify here.") + '</p>' +
+        '<button class="btn full" type="button" data-action="verifyOrderPayment" data-method="' + escapeHtml(payment.id) + '" data-order-id="' + escapeHtml(payment.orderId) + '">Verify payment</button>'
+      );
+    }
+
+    async function verifyOrderPaymentFromSheet(target) {
+      const reference = byId("orderPaymentRef")?.value?.trim() || "";
+      const amount = byId("orderPaymentAmount")?.value?.trim() || "";
+      if (!reference) {
+        showToast("Paste the transaction ID or hash first.", true);
+        return;
+      }
+      if (target.dataset.method === "upi" && !amount) {
+        showToast("Enter the INR amount you sent.", true);
+        return;
+      }
+      const button = target;
+      try {
+        button.disabled = true;
+        button.textContent = "Verifying...";
+        openSheet(processingSheetHtml("Verifying Payment", "Order payment", 1));
+        const payload = await postAction("/api/order/verify", {
+          orderId: Number(target.dataset.orderId),
+          method: target.dataset.method,
+          reference,
+          amount,
+        });
+        applyStatePayload(payload);
+        render();
+        tg?.HapticFeedback?.notificationOccurred?.("success");
+        openSheet(deliveryResultHtml(payload));
+        showToast(payload.delivery?.message || payload.message || "Payment verified.");
+      } catch (error) {
+        tg?.HapticFeedback?.notificationOccurred?.("error");
+        const message = displayErrorMessage(error);
+        showActionErrorSheet("Payment Verification Failed", message);
+        showToast(message, true);
+      } finally {
+        button.disabled = false;
+        button.textContent = "Verify payment";
+      }
+    }
+
+    async function showDepositSheet(methodId = state.depositMethod) {
+      openSheet('<div class="sheet-title"><span>' + customEmoji("deposit", "$") + 'Make a deposit</span><button class="icon-btn" type="button" data-action="closeSheet">' + customEmoji("close", "x", "solo") + '</button></div><p class="small">Creating secure payment session...</p>');
+      try {
+        const requestedMethod = methodId || state.depositMethod || "binance_pay";
+        const payload = await postAction("/api/deposit/session", { method: requestedMethod });
+        state.depositMethods = payload.depositMethods || state.depositMethods;
+        state.depositMethod = payload.selectedMethod || requestedMethod;
+      } catch (error) {
+        closeSheet();
+        showToast(displayErrorMessage(error), true);
+        return;
+      }
+      const methods = state.depositMethods.length ? state.depositMethods : [
+        { id: "binance_pay", label: "Binance Pay", addressLabel: "Pay ID", address: "", recipient: "", referenceLabel: "Transaction ID / Order ID", placeholder: "Paste transaction ID", note: "Send payment, then paste reference here." }
+      ];
+      state.depositMethod = methodById(methodId)?.id || methods[0].id;
+      const method = methodById(state.depositMethod) || methods[0];
+      const methodButtons = methods.map((item) =>
+        '<button class="pay-option ' + (item.id === method.id ? "active" : "") + '" type="button" data-action="selectDepositMethod" data-method="' + escapeHtml(item.id) + '">' +
+          '<span>' + customEmoji(item.iconKey || "wallet", "💳") + escapeHtml(item.label) + '</span>' +
+        '</button>'
+      ).join("");
+      const addressBlock = method.address
+        ? '<label class="form-field"><span>' + escapeHtml(method.addressLabel || "Send to this address") + '</span>' +
+            '<div class="copy-box"><div class="copy-value">' + escapeHtml(method.address) + '</div>' +
+            '<button class="copy-btn" type="button" data-action="copyDepositValue" data-copy="' + escapeHtml(method.address) + '">Copy</button></div>' +
+          '</label>'
+        : "";
+      const recipientBlock = method.recipient
+        ? '<p class="small">Recipient: <b>' + escapeHtml(method.recipient) + '</b></p>'
+        : "";
+      const depositQrUrl = method.id === "upi" ? upiQrUrl(method.noteCode || method.referenceValue || "") : method.qrImageUrl;
+      const qrBlock = depositQrUrl
+        ? '<div class="qr-box ' + (method.id === "upi" ? "upi" : "") + '"><img src="' + escapeHtml(depositQrUrl) + '" alt=""><div><strong>' + (method.id === "upi" ? "Scan UPI QR" : "Scan QR or use UPI ID") + '</strong><div class="small">' + escapeHtml(method.rateLabel || "") + '</div></div></div>'
+        : "";
+      const noteBlock = method.noteCode
+        ? '<label class="form-field"><span>Payment note code</span>' +
+            '<div class="copy-box"><div class="copy-value">' + escapeHtml(method.noteCode) + '</div>' +
+            '<button class="copy-btn" type="button" data-action="copyDepositValue" data-copy="' + escapeHtml(method.noteCode) + '">Copy</button></div>' +
+          '</label>'
+        : "";
+      const referenceValue = method.referenceValue || "";
+      const referenceAttrs = (method.readonlyReference ? " readonly" : "") +
+        (referenceValue ? ' value="' + escapeHtml(referenceValue) + '"' : "");
+      const amountLabel = method.amountLabel || (method.id === "upi" ? "Amount (INR)" : "Amount (USDT)");
+      const amountPlaceholder = method.amountPlaceholder || (method.id === "upi" ? "INR amount you sent (optional)" : "USDT amount you sent (optional)");
+      const referenceInput = '<label class="form-field"><span>' + escapeHtml(method.referenceLabel || "Transaction ID / Hash") + '</span><input class="input" id="depositRef" autocomplete="off" placeholder="' + escapeHtml(method.placeholder || "Paste reference") + '"' + referenceAttrs + '></label>';
+      openSheet(
+        '<div class="sheet-title"><span>' + customEmoji("deposit", "💰") + 'Make a deposit</span><button class="icon-btn" type="button" data-action="closeSheet">' + customEmoji("close", "×", "solo") + '</button></div>' +
+        '<div class="label">Payment method</div>' +
+        '<div class="deposit-methods">' + methodButtons + '</div>' +
+        qrBlock +
+        addressBlock +
+        recipientBlock +
+        noteBlock +
+        '<label class="form-field"><span>' + escapeHtml(amountLabel) + '</span><input class="input" id="depositAmount" inputmode="decimal" autocomplete="off" placeholder="' + escapeHtml(amountPlaceholder) + '"></label>' +
+        referenceInput +
+        '<p class="small">' + escapeHtml(method.note || "The verified payment amount will be credited automatically.") + '</p>' +
+        '<button class="btn full" type="button" data-action="submitDeposit">Submit deposit</button>'
+      );
+    }
+
+    function showBalanceSheet() {
+      const product = state.product;
+      const need = Math.max(0, totalFor(product) - Number(state.user.balanceUsdt || 0));
+      openSheet(
+        '<div class="sheet-title"><span>Insufficient balance</span><button class="icon-btn" type="button" data-action="closeSheet">' + customEmoji("close", "×", "solo") + '</button></div>' +
+        '<p class="small">You need ' + money(need) + ' USDT more. Add balance here, then buy again inside the Mini App.</p>' +
+        '<button class="btn full" type="button" data-action="deposit">' + customEmoji("deposit", "💰") + 'Make a deposit</button>'
+      );
+    }
+
+    function showTransactionsSheet() {
+      openSheet(
+        '<div class="sheet-title"><span>Transactions</span><button class="icon-btn" type="button" data-action="closeSheet">' + customEmoji("close", "x", "solo") + '</button></div>' +
+        '<section class="stack">' +
+          (state.transactions.length ? state.transactions.map(transactionCard).join("") : emptyHtml("No wallet transactions yet.")) +
+        '</section>'
+      );
+    }
+
+    function openSheet(html) {
+      byId("sheet").innerHTML = '<div class="sheet-handle"></div>' + html;
+      byId("sheetBackdrop").classList.add("active");
+    }
+
+    function closeSheet() {
+      byId("sheetBackdrop").classList.remove("active");
+    }
+
+    async function buyProduct() {
+      const product = state.product;
+      if (!product || state.busy) return;
+      syncProductQtyInput();
+      showCouponPromptSheet();
+    }
+
+    async function submitDeposit() {
+      const method = methodById(state.depositMethod);
+      const reference = byId("depositRef")?.value?.trim() || "";
+      const amount = byId("depositAmount")?.value?.trim() || "";
+      const button = document.querySelector('[data-action="submitDeposit"]');
+      if (!method) {
+        showToast("Select a payment method first.", true);
+        return;
+      }
+      if (!reference) {
+        showToast("Paste the transaction ID or hash first.", true);
+        return;
+      }
+      if (method.id === "upi" && !amount) {
+        showToast("Enter the INR amount you sent.", true);
+        return;
+      }
+      try {
+        if (button) {
+          button.disabled = true;
+          button.textContent = "Verifying...";
+        }
+        startDepositVerifyProgress(method);
+        const payload = await postAction("/api/deposit/verify", { method: method.id, reference, amount });
+        stopDepositVerifyProgress();
+        state.user.balanceUsdt = payload.balanceUsdt || state.user.balanceUsdt;
+        state.stats.totalDepositedUsdt = payload.totalDepositedUsdt || state.stats.totalDepositedUsdt;
+        state.deposits = payload.deposits || state.deposits;
+        state.transactions = payload.transactions || state.transactions;
+        state.stats.depositsCount = state.deposits.length;
+        state.stats.transactionsCount = state.transactions.length;
+        closeSheet();
+        render();
+        tg?.HapticFeedback?.notificationOccurred?.("success");
+        showToast(payload.message || "Deposit credited.");
+      } catch (error) {
+        stopDepositVerifyProgress();
+        tg?.HapticFeedback?.notificationOccurred?.("error");
+        const message = displayErrorMessage(error);
+        showActionErrorSheet("Deposit Verification Failed", message);
+        showToast(message, true);
+      } finally {
+        if (button) {
+          button.disabled = false;
+          button.textContent = "Submit deposit";
+        }
+      }
+    }
+
+    async function uploadReviewProof(depositId) {
+      const id = Number(depositId || 0);
+      const fileInput = byId("reviewProofFile");
+      const file = fileInput?.files?.[0];
+      const button = document.querySelector('[data-action="uploadReviewProof"]');
+      if (!Number.isFinite(id) || id <= 0) {
+        showToast("Deposit not found.", true);
+        return;
+      }
+      if (!file) {
+        showToast("Attach a screenshot or video first.", true);
+        return;
+      }
+      if (file.size > 20 * 1024 * 1024) {
+        showToast("Upload a file under 20 MB.", true);
+        return;
+      }
+      const type = String(file.type || "").toLowerCase();
+      if (!type.startsWith("image/") && !type.startsWith("video/")) {
+        showToast("Upload a photo or video proof only.", true);
+        return;
+      }
+      try {
+        if (button) {
+          button.disabled = true;
+          button.textContent = "Uploading...";
+        }
+        const form = new FormData();
+        form.append("depositId", String(id));
+        form.append("file", file);
+        const response = await fetch(API_BASE + "/api/deposit/review-upload", {
+          method: "POST",
+          headers: authHeader(),
+          body: form,
+        });
+        const payload = await response.json();
+        if (!response.ok || !payload.ok) {
+          throw new Error(payload.error || "Upload failed.");
+        }
+        applyStatePayload(payload);
+        closeSheet();
+        render();
+        tg?.HapticFeedback?.notificationOccurred?.("success");
+        showToast(payload.message || "Proof uploaded.");
+      } catch (error) {
+        tg?.HapticFeedback?.notificationOccurred?.("error");
+        showToast(displayErrorMessage(error), true);
+      } finally {
+        if (button) {
+          button.disabled = false;
+          button.textContent = "Upload screenshot / video";
+        }
+      }
+    }
+
+    async function copyText(value) {
+      try {
+        await navigator.clipboard.writeText(value);
+        tg?.HapticFeedback?.notificationOccurred?.("success");
+        showToast("Copied.");
+      } catch {
+        showToast("Copy failed. Long-press the address to copy.", true);
+      }
+    }
+
+    function openSupport() {
+      const user = state.bot.supportUsername || "urweebboii";
+      tg?.openTelegramLink?.("https://t.me/" + user);
+    }
+
+    function openBot() {
+      const bot = state.bot.username || "Loguetown_bot";
+      tg?.openTelegramLink?.("https://t.me/" + bot);
+    }
+
+    document.addEventListener("click", (event) => {
+      const clicked = event.target instanceof Element ? event.target : event.target?.parentElement;
+      if (!clicked) return;
+      const openUrl = clicked.closest("[data-open-url]");
+      if (openUrl) {
+        event.preventDefault();
+        const url = openUrl.dataset.openUrl || openUrl.getAttribute("href") || "";
+        if (url) {
+          tg?.openLink?.(url, { try_instant_view: false });
+          if (!tg?.openLink) window.open(url, "_blank", "noopener,noreferrer");
+        }
+        return;
+      }
+
+      const productCard = clicked.closest("[data-product-id]");
+      if (productCard) {
+        const product = state.products.find((item) => item.id === Number(productCard.dataset.productId));
+        if (product) setTab("product", { product });
+        return;
+      }
+
+      const orderCard = clicked.closest(".order-click[data-order-id]");
+      if (orderCard) {
+        const order = state.orders.find((item) => item.id === Number(orderCard.dataset.orderId));
+        if (order) showOrderDetailsSheet(order);
+        return;
+      }
+
+      const depositCard = clicked.closest(".order-click[data-deposit-id]");
+      if (depositCard) {
+        const deposit = state.deposits.find((item) => item.id === Number(depositCard.dataset.depositId));
+        if (deposit) showDepositDetailsSheet(deposit);
+        return;
+      }
+
+      const target = clicked.closest("[data-action], [data-tab]");
+      if (!target) return;
+
+      const action = target.dataset.action;
+      if (target.dataset.tab) setTab(target.dataset.tab);
+      if (action === "tab") setTab(target.dataset.tab || "home");
+      if (action === "deposit") showDepositSheet();
+      if (action === "selectDepositMethod") showDepositSheet(target.dataset.method);
+      if (action === "copyDepositValue") copyText(target.dataset.copy || "");
+      if (action === "submitDeposit") submitDeposit();
+      if (action === "uploadReviewProof") uploadReviewProof(target.dataset.depositId);
+      if (action === "closeSheet") closeSheet();
+      if (action === "buy") buyProduct();
+      if (action === "enterCoupon") showCouponEntrySheet(target.dataset.coupon || "");
+      if (action === "continueNoCoupon") showCheckoutSheet("");
+      if (action === "applyCouponFromPrompt") showCheckoutSheet(byId("couponCodeInput")?.value?.trim() || "");
+      if (action === "changeCoupon") showCouponEntrySheet(target.dataset.coupon || "");
+      if (action === "payWallet") payWalletFromSheet(target.dataset.coupon || "");
+      if (action === "startOrderPayment") startOrderPaymentFromSheet(target.dataset.method || "", target.dataset.coupon || "");
+      if (action === "verifyOrderPayment") verifyOrderPaymentFromSheet(target);
+      if (action === "support") openSupport();
+      if (action === "liveSessions") setTab("liveSessions");
+      if (action === "refreshLiveSessions") loadLiveSessions(true);
+      if (action === "downloadLiveSession") downloadLiveSession(target.dataset.sessionId || "");
+      if (action === "openBot") openBot();
+      if (action === "transactions") showTransactionsSheet();
+      if (action === "wallet") setTab("wallet");
+      if (action === "qtyInc" && state.product) {
+        const product = state.product;
+        state.qty.set(product.id, Math.min(product.maxQty, qtyFor(product) + 1));
+        renderProduct();
+      }
+      if (action === "qtyDec" && state.product) {
+        const product = state.product;
+        state.qty.set(product.id, Math.max(product.minQty, qtyFor(product) - 1));
+        renderProduct();
+      }
+    });
+
+    document.addEventListener("input", (event) => {
+      const target = event.target.closest('[data-action="qtyInput"]');
+      const product = state.product;
+      if (!target || !product) return;
+      const parsed = Math.floor(Number(target.value));
+      if (Number.isFinite(parsed) && parsed >= product.minQty && parsed <= product.maxQty) {
+        state.qty.set(product.id, parsed);
+        updateBuyButton(product);
+      }
+    });
+
+    document.addEventListener("change", (event) => {
+      const target = event.target.closest('[data-action="qtyInput"]');
+      if (!target || !state.product) return;
+      syncProductQtyInput();
+      renderProduct();
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter" && event.key !== " ") return;
+      const target = event.target instanceof Element ? event.target.closest("[data-product-id]") : null;
+      if (!target) return;
+      event.preventDefault();
+      const product = state.products.find((item) => item.id === Number(target.dataset.productId));
+      if (product) setTab("product", { product });
+    });
+
+    byId("sheetBackdrop").addEventListener("click", (event) => {
+      if (event.target === byId("sheetBackdrop")) closeSheet();
+    });
+
+    byId("refreshBtn").addEventListener("click", () => {
+      state.ready = false;
+      loadShop().catch((error) => {
+        state.ready = true;
+        byId("home").innerHTML = emptyHtml("Could not load mini app. Tap refresh to retry.");
+        setNotice(displayErrorMessage(error), true);
+        showAppShell();
+      });
+    });
+
+    byId("backBtn").addEventListener("click", () => {
+      if (state.tab === "product") {
+        setTab(state.previousTab || "shop");
+      } else if (state.tab === "liveSessions") {
+        setTab("me");
+      } else if (state.tab !== "home") {
+        setTab("home");
+      }
+    });
+
+    document.addEventListener("contextmenu", (event) => {
+      if (event.target instanceof Element && event.target.closest("img")) {
+        event.preventDefault();
+      }
+    });
+
+    document.addEventListener("dragstart", (event) => {
+      if (event.target instanceof Element && event.target.closest("img")) {
+        event.preventDefault();
+      }
+    });
+
+    setInterval(() => {
+      if (state.tab === "wallet" || liveDepositCount() > 0) {
+        refreshLiveState();
+      }
+    }, 9000);
+
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) refreshLiveState();
+    });
+
+    setTab("home");
+    loadShop().catch((error) => {
+      state.ready = true;
+      byId("home").innerHTML = emptyHtml("Could not load mini app. Tap refresh to retry.");
+      setNotice(displayErrorMessage(error), true);
+      showAppShell();
+    });
+  </script>
+</body>
+</html>
