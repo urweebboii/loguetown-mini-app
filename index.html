@@ -1853,7 +1853,7 @@
       <button class="nav-btn" type="button" data-tab="shop"><span class="nav-icon" data-emoji-key="shop" data-fallback="🛒">🛒</span><span>Shop</span></button>
       <button class="nav-btn" type="button" data-tab="orders"><span class="nav-icon" data-emoji-key="orders" data-fallback="💳">💳</span><span>Orders</span></button>
       <button class="nav-btn" type="button" data-tab="wallet"><span class="nav-icon" data-emoji-key="wallet" data-fallback="💰">💰</span><span>Wallet</span></button>
-      <button class="nav-btn" type="button" data-tab="me"><span class="nav-icon" data-emoji-key="me" data-fallback="👤">👤</span><span>Me</span></button>
+      <button class="nav-btn" type="button" data-tab="me"><span class="nav-icon" data-emoji-key="me" data-fallback="⚙">⚙</span><span>Settings</span></button>
     </div>
   </nav>
 
@@ -1876,8 +1876,9 @@
       checkout: null,
       depositMethod: "binance_pay",
       bot: { name: "Loguetown Shoppie", username: "Loguetown_bot", supportUsername: "urweebboii", logoUrl: "" },
-      user: { id: "", username: "", balanceUsdt: "0", joinedAt: "", role: "user", roleLabel: "User", isReseller: false, roleTags: [{ role: "user", label: "User" }] },
+      user: { id: "", username: "", balanceUsdt: "0", joinedAt: "", role: "user", roleLabel: "User", isReseller: false, roleTags: [{ role: "user", label: "User" }], language: "en", languageLabel: "English", currencyCode: "USD", currencyLabel: "USD - US Dollar" },
       stats: { totalDepositedUsdt: "0", ordersCount: 0, depositsCount: 0, transactionsCount: 0, liveSessionsCount: 0 },
+      settings: { languageOptions: [], currencyOptions: [], selectedLanguage: "en", selectedCurrency: "USD" },
       products: [],
       orders: [],
       deposits: [],
@@ -2073,7 +2074,7 @@
       if (state.tab === "shop") return "Shop";
       if (state.tab === "orders") return "Orders";
       if (state.tab === "wallet") return "Wallet";
-      if (state.tab === "me") return "Me";
+      if (state.tab === "me") return "Settings";
       if (state.tab === "liveSessions") return "Live Sessions";
       return "Product";
     }
@@ -2467,6 +2468,18 @@
       '</article>';
     }
 
+    function currentLanguageLabel() {
+      const code = String(state.user.language || state.settings.selectedLanguage || "en").toLowerCase();
+      const option = (state.settings.languageOptions || []).find((item) => String(item.code || "").toLowerCase() === code);
+      return option?.label || state.user.languageLabel || code.toUpperCase();
+    }
+
+    function currentCurrencyLabel() {
+      const code = String(state.user.currencyCode || state.settings.selectedCurrency || "USD").toUpperCase();
+      const option = (state.settings.currencyOptions || []).find((item) => String(item.code || "").toUpperCase() === code);
+      return option?.label || state.user.currencyLabel || code;
+    }
+
     function renderMe() {
       byId("me").innerHTML =
         '<section class="profile">' +
@@ -2476,6 +2489,12 @@
             '<div class="small">' + (state.user.username ? "@" + escapeHtml(state.user.username) : "Telegram user") + '</div></div>' +
           '</div>' +
         '</section>' +
+        '<div class="label">Preferences</div>' +
+        '<section class="action-card">' +
+          actionRow("Language", "languageSettings", currentLanguageLabel()) +
+          actionRow("Currency", "currencySettings", currentCurrencyLabel()) +
+        '</section>' +
+        '<div class="label">Account</div>' +
         '<section class="metric-card">' +
           metricRow("Balance", money(state.user.balanceUsdt) + " USDT") +
           metricRow("Total deposited", money(state.stats.totalDepositedUsdt) + " USDT") +
@@ -2663,6 +2682,7 @@
       }
       state.bot = payload.bot || state.bot;
       state.user = payload.user || state.user;
+      state.settings = payload.settings || state.settings;
       state.stats = payload.stats || state.stats;
       state.products = payload.products || [];
       state.orders = payload.orders || [];
@@ -2741,6 +2761,7 @@
     function applyStatePayload(payload) {
       if (payload.bot) state.bot = payload.bot;
       if (payload.user) state.user = payload.user;
+      if (payload.settings) state.settings = payload.settings;
       if (payload.balanceUsdt !== undefined) state.user.balanceUsdt = payload.balanceUsdt;
       if (payload.totalDepositedUsdt !== undefined) state.stats.totalDepositedUsdt = payload.totalDepositedUsdt;
       if (payload.stats) state.stats = payload.stats;
@@ -3273,6 +3294,80 @@
       );
     }
 
+    function settingsOptionButton(label, action, key, value, selected) {
+      return '<button class="pay-option ' + (selected ? "active" : "") + '" type="button" data-action="' + escapeHtml(action) + '" data-' + key + '="' + escapeHtml(value) + '">' +
+        '<span>' + escapeHtml(label) + '</span>' +
+      '</button>';
+    }
+
+    function showLanguageSettingsSheet() {
+      const selected = String(state.user.language || state.settings.selectedLanguage || "en").toLowerCase();
+      const options = state.settings.languageOptions?.length
+        ? state.settings.languageOptions
+        : [{ code: "en", label: "English" }];
+      openSheet(
+        '<div class="sheet-title"><span>Language</span><button class="icon-btn" type="button" data-action="closeSheet">' + customEmoji("close", "x", "solo") + '</button></div>' +
+        '<div class="deposit-methods">' +
+          options.map((option) => {
+            const code = String(option.code || "en").toLowerCase();
+            return settingsOptionButton(option.label || code.toUpperCase(), "saveLanguage", "language", code, code === selected);
+          }).join("") +
+        '</div>'
+      );
+    }
+
+    function showCurrencySettingsSheet() {
+      const selected = String(state.user.currencyCode || state.settings.selectedCurrency || "USD").toUpperCase();
+      const options = state.settings.currencyOptions?.length
+        ? state.settings.currencyOptions
+        : [{ code: "USD", label: "USD - US Dollar" }];
+      openSheet(
+        '<div class="sheet-title"><span>Currency</span><button class="icon-btn" type="button" data-action="closeSheet">' + customEmoji("close", "x", "solo") + '</button></div>' +
+        '<div class="deposit-methods">' +
+          options.map((option) => {
+            const code = String(option.code || "USD").toUpperCase();
+            return settingsOptionButton(option.label || code, "saveCurrency", "currency", code, code === selected);
+          }).join("") +
+        '</div>'
+      );
+    }
+
+    async function saveLanguageSetting(language) {
+      if (!language || state.busy) return;
+      state.busy = true;
+      try {
+        const payload = await postAction("/api/settings/language", { language });
+        applyStatePayload(payload);
+        closeSheet();
+        render();
+        tg?.HapticFeedback?.notificationOccurred?.("success");
+        showToast(payload.message || "Language saved.");
+      } catch (error) {
+        tg?.HapticFeedback?.notificationOccurred?.("error");
+        showToast(displayErrorMessage(error), true);
+      } finally {
+        state.busy = false;
+      }
+    }
+
+    async function saveCurrencySetting(currency) {
+      if (!currency || state.busy) return;
+      state.busy = true;
+      try {
+        const payload = await postAction("/api/settings/currency", { currency });
+        applyStatePayload(payload);
+        closeSheet();
+        render();
+        tg?.HapticFeedback?.notificationOccurred?.("success");
+        showToast(payload.message || "Currency saved.");
+      } catch (error) {
+        tg?.HapticFeedback?.notificationOccurred?.("error");
+        showToast(displayErrorMessage(error), true);
+      } finally {
+        state.busy = false;
+      }
+    }
+
     function openSheet(html) {
       byId("sheet").innerHTML = '<div class="sheet-handle"></div>' + html;
       byId("sheetBackdrop").classList.add("active");
@@ -3476,6 +3571,10 @@
       if (action === "openBot") openBot();
       if (action === "transactions") showTransactionsSheet();
       if (action === "wallet") setTab("wallet");
+      if (action === "languageSettings") showLanguageSettingsSheet();
+      if (action === "currencySettings") showCurrencySettingsSheet();
+      if (action === "saveLanguage") saveLanguageSetting(target.dataset.language || "");
+      if (action === "saveCurrency") saveCurrencySetting(target.dataset.currency || "");
       if (action === "qtyInc" && state.product) {
         const product = state.product;
         state.qty.set(product.id, Math.min(product.maxQty, qtyFor(product) + 1));
