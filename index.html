@@ -2675,7 +2675,7 @@
       tg.expand();
       tg.disableVerticalSwipes?.();
       loading();
-      const response = await fetch(API_BASE + "/api/bootstrap", { headers: authHeader() });
+      const response = await fetch(API_BASE + "/api/bootstrap", { headers: authHeader(), cache: "no-store" });
       const payload = await response.json();
       if (!response.ok || !payload.ok) {
         throw new Error(payload.error || "Shop could not be loaded.");
