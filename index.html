@@ -676,6 +676,270 @@
       transition: color .14s, transform .14s;
     }
 
+    .orders-head {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .orders-head h1 {
+      margin: 0;
+      font-size: 26px;
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    .order-search-wrap {
+      min-height: 42px;
+      border: 1px solid rgba(139, 196, 255, .22);
+      background: rgba(11, 13, 30, .62);
+      border-radius: 8px;
+      padding: 0 12px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      align-items: center;
+      gap: 9px;
+      color: var(--muted);
+    }
+
+    .order-search-wrap input {
+      width: 100%;
+      min-width: 0;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: var(--text);
+      font-size: 15px;
+      font-weight: 750;
+    }
+
+    .order-search-wrap input::placeholder {
+      color: #b9c4d0;
+    }
+
+    .order-history-list {
+      gap: 10px;
+    }
+
+    .order-history-card {
+      border: 1px solid rgba(111, 98, 255, .34);
+      background: linear-gradient(180deg, rgba(31, 27, 72, .94), rgba(21, 20, 55, .96));
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .04), 0 10px 24px rgba(0, 0, 0, .18);
+    }
+
+    .order-history-card[hidden] {
+      display: none;
+    }
+
+    .order-summary-btn {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      gap: 10px;
+      align-items: start;
+      padding: 13px 14px;
+      text-align: left;
+    }
+
+    .order-summary-main {
+      min-width: 0;
+      display: grid;
+      gap: 4px;
+    }
+
+    .order-summary-title {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      min-width: 0;
+      font-size: 15px;
+      font-weight: 950;
+      line-height: 1.15;
+    }
+
+    .order-summary-title span:first-child {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .order-ref-pill {
+      flex: 0 0 auto;
+      max-width: 112px;
+      border-radius: 6px;
+      padding: 2px 5px;
+      background: rgba(242, 207, 74, .16);
+      color: #f2cf4a;
+      font-size: 9px;
+      line-height: 1.1;
+      font-weight: 950;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .order-summary-sub {
+      color: #c8d2de;
+      font-size: 12px;
+      font-weight: 750;
+      line-height: 1.35;
+    }
+
+    .order-summary-price {
+      min-width: 66px;
+      text-align: right;
+      display: grid;
+      gap: 3px;
+      justify-items: end;
+      font-weight: 950;
+      line-height: 1.1;
+    }
+
+    .order-summary-price .status {
+      text-transform: none;
+      font-size: 10px;
+      padding: 0;
+      background: transparent;
+      color: #47e99b;
+    }
+
+    .order-chev {
+      padding-top: 4px;
+      color: #aeb8c5;
+      font-size: 16px;
+      line-height: 1;
+    }
+
+    .order-expanded {
+      border-top: 1px solid rgba(139, 196, 255, .14);
+      display: grid;
+      gap: 13px;
+      padding: 13px 14px 15px;
+      background: rgba(13, 13, 37, .26);
+    }
+
+    .order-detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 13px 16px;
+    }
+
+    .order-detail-field {
+      min-width: 0;
+      display: grid;
+      gap: 3px;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .order-detail-field strong {
+      color: #c7d1dc;
+      font-weight: 850;
+    }
+
+    .order-detail-field span {
+      font-weight: 900;
+      overflow-wrap: anywhere;
+    }
+
+    .order-item-count {
+      color: #dfe8f4;
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .order-export-actions {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      align-items: center;
+    }
+
+    .order-export-btn {
+      min-height: 38px;
+      border-radius: 8px;
+      background: transparent;
+      color: #f8fbff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 950;
+    }
+
+    .order-export-btn.active,
+    .order-export-btn:active {
+      background: rgba(95, 81, 214, .62);
+    }
+
+    .order-code-preview {
+      margin: 0;
+      max-height: 160px;
+      overflow: auto;
+      border-radius: 8px;
+      background: rgba(5, 7, 21, .72);
+      padding: 12px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+      font: 800 12px/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      color: #fff;
+    }
+
+    .order-instructions {
+      border: 1px solid rgba(111, 98, 255, .46);
+      border-radius: 8px;
+      padding: 13px 14px;
+      display: grid;
+      gap: 12px;
+      background: rgba(25, 24, 73, .55);
+    }
+
+    .order-instructions-title {
+      color: #6f62ff;
+      font-size: 14px;
+      font-weight: 950;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .order-instruction-box {
+      border-radius: 8px;
+      background: rgba(43, 39, 106, .46);
+      padding: 12px;
+      display: grid;
+      gap: 9px;
+    }
+
+    .order-instruction-step {
+      display: grid;
+      grid-template-columns: 18px 1fr;
+      gap: 8px;
+      align-items: start;
+      font-size: 13px;
+      line-height: 1.38;
+      font-weight: 850;
+    }
+
+    .order-instruction-step b {
+      width: 14px;
+      height: 14px;
+      border-radius: 5px;
+      display: grid;
+      place-items: center;
+      background: rgba(0, 153, 255, .18);
+      color: #42b9ff;
+      font-size: 9px;
+      line-height: 1;
+      margin-top: 2px;
+    }
+
     .order-title {
       font-weight: 900;
       line-height: 1.22;
@@ -1081,38 +1345,6 @@
       flex: 0 0 auto;
     }
 
-    .session-card {
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--panel);
-      padding: 12px;
-      display: grid;
-      gap: 10px;
-    }
-
-    .session-head {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      align-items: start;
-      gap: 12px;
-    }
-
-    .session-subject {
-      font-size: 16px;
-      line-height: 1.25;
-      font-weight: 900;
-      overflow-wrap: anywhere;
-    }
-
-    .session-meta {
-      display: grid;
-      gap: 5px;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.35;
-      font-weight: 700;
-    }
-
     .session-actions {
       display: grid;
       grid-template-columns: 1fr;
@@ -1512,6 +1744,16 @@
       .metric-row span {
         text-align: left;
       }
+
+      .order-summary-btn,
+      .order-detail-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .order-summary-price {
+        text-align: left;
+        justify-items: start;
+      }
     }
 
     .pay-option {
@@ -1815,6 +2057,746 @@
       from { background-position: 0 0, 0 0; }
       to { background-position: 34px 0, 0 0; }
     }
+
+    /* Rexovaan-style compact theme refresh. Core actions and APIs stay unchanged. */
+    :root {
+      color-scheme: dark;
+      --bg: #080715;
+      --surface: #0d0b1f;
+      --panel: #12102a;
+      --panel2: #181540;
+      --panel3: #211d55;
+      --text: #fbfbff;
+      --muted: #aeb7d5;
+      --line: rgba(117, 106, 255, .24);
+      --line-strong: rgba(103, 197, 255, .42);
+      --accent: #6250f4;
+      --accent2: #10c88a;
+      --warn: #f6c344;
+      --danger: #ff6570;
+      --ok: #20e196;
+      --shadow: 0 20px 48px rgba(0, 0, 0, .38);
+    }
+
+    html,
+    body {
+      background:
+        radial-gradient(circle at 50% -12%, rgba(98, 80, 244, .28), transparent 44%),
+        linear-gradient(180deg, #080715 0%, #090819 52%, #070612 100%);
+    }
+
+    body {
+      padding: calc(env(safe-area-inset-top) + 10px) 12px calc(env(safe-area-inset-bottom) + 90px);
+    }
+
+    .app {
+      max-width: 380px;
+    }
+
+    .appbar {
+      height: 58px;
+      margin: 0 0 16px;
+      padding: 8px 10px;
+      grid-template-columns: 42px minmax(0, 1fr) 42px;
+      border: 1px solid rgba(117, 106, 255, .20);
+      border-radius: 8px;
+      background: rgba(13, 11, 31, .90);
+      box-shadow: 0 14px 30px rgba(0, 0, 0, .24), inset 0 1px 0 rgba(255, 255, 255, .04);
+    }
+
+    .title {
+      justify-content: flex-start;
+      font-size: 16px;
+    }
+
+    .brand-icon,
+    .avatar {
+      border-color: rgba(255, 255, 255, .13);
+      background: linear-gradient(145deg, #241f50, #0f0d24);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, .26);
+    }
+
+    .brand-icon {
+      width: 38px;
+      height: 38px;
+    }
+
+    .icon-btn {
+      color: #aeb7d5;
+      background: rgba(255, 255, 255, .035);
+      border: 1px solid rgba(117, 106, 255, .14);
+    }
+
+    .page-head {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .page-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .page-title-row h1 {
+      margin: 0;
+      font-size: 24px;
+      line-height: 1.1;
+      font-weight: 950;
+      letter-spacing: 0;
+    }
+
+    .surface-card,
+    .product-card,
+    .order-card,
+    .metric-card,
+    .list-card,
+    .transaction-card,
+    .session-card,
+    .action-card,
+    .delivery-card,
+    .verify-card,
+    .detail-box,
+    .mini-stat,
+    .empty,
+    .notice {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(24, 21, 64, .92), rgba(15, 13, 35, .96));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .035);
+    }
+
+    .search,
+    .input,
+    .copy-box,
+    .order-search-wrap {
+      min-height: 42px;
+      border-color: rgba(117, 106, 255, .28);
+      background: rgba(8, 8, 24, .72);
+      border-radius: 8px;
+      color: var(--text);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .035);
+    }
+
+    .search::placeholder,
+    .input::placeholder,
+    .order-search-wrap input::placeholder {
+      color: #b8c0df;
+    }
+
+    .label {
+      color: #8d82ff;
+      font-size: 11px;
+      letter-spacing: .08em;
+    }
+
+    .btn {
+      min-height: 44px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #6754ff, #4b43de);
+      box-shadow: 0 12px 24px rgba(98, 80, 244, .23), inset 0 1px 0 rgba(255, 255, 255, .18);
+    }
+
+    .btn.secondary {
+      background: rgba(24, 21, 64, .95);
+      border-color: rgba(117, 106, 255, .28);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .04);
+    }
+
+    .btn.ghost {
+      background: rgba(98, 80, 244, .16);
+      border-color: rgba(117, 106, 255, .34);
+    }
+
+    .product-list,
+    .stack {
+      gap: 12px;
+    }
+
+    .product-card {
+      min-height: 96px;
+      padding: 12px;
+      grid-template-columns: 58px minmax(0, 1fr) 18px;
+      background: linear-gradient(180deg, rgba(24, 21, 64, .95), rgba(13, 12, 31, .98));
+    }
+
+    .product-media {
+      width: 58px;
+      height: 58px;
+      border: 1px solid rgba(117, 106, 255, .22);
+      background: linear-gradient(145deg, #211d55, #0f0d24);
+    }
+
+    .product-name {
+      font-size: 16px;
+      margin-bottom: 6px;
+    }
+
+    .product-desc {
+      color: #c5cbe7;
+    }
+
+    .price,
+    .detail-price,
+    .hero-balance strong,
+    .wallet-amount {
+      color: #ffffff;
+    }
+
+    .stock,
+    .stock-badge {
+      color: #21eba2;
+    }
+
+    .stock-badge {
+      display: inline-flex;
+      align-items: center;
+      width: max-content;
+      min-height: 30px;
+      padding: 0 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(32, 225, 150, .32);
+      background: rgba(32, 225, 150, .12);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .orders-head {
+      gap: 12px;
+    }
+
+    .orders-head h1 {
+      font-size: 25px;
+    }
+
+    .order-history-card,
+    .deposit-history-card {
+      border: 1px solid rgba(117, 106, 255, .32);
+      border-radius: 8px;
+      background: linear-gradient(180deg, rgba(25, 23, 72, .98), rgba(15, 13, 42, .98));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .045), 0 12px 26px rgba(0, 0, 0, .22);
+      overflow: hidden;
+    }
+
+    .order-summary-btn {
+      padding: 14px;
+    }
+
+    .order-ref-pill,
+    .deposit-ref-pill {
+      background: rgba(246, 195, 68, .13);
+      color: #f6c344;
+      border: 1px solid rgba(246, 195, 68, .24);
+      border-radius: 6px;
+    }
+
+    .order-expanded,
+    .order-instructions,
+    .order-instruction-box {
+      background: rgba(9, 8, 28, .38);
+    }
+
+    .status.delivered,
+    .status.credited,
+    .status.completed {
+      background: rgba(32, 225, 150, .16);
+      color: #20e196;
+    }
+
+    .status.pending,
+    .status.pending_payment,
+    .status.pending_review,
+    .status.manual_pending,
+    .status.manual_accepted {
+      background: rgba(246, 195, 68, .16);
+      color: #f6c344;
+    }
+
+    .status.cancelled,
+    .status.failed,
+    .status.rejected {
+      background: rgba(255, 101, 112, .16);
+      color: #ff9098;
+    }
+
+    .wallet-panel,
+    .account-hero,
+    .deposit-topup-hero,
+    .product-detail-card,
+    .buy-panel,
+    .checkout-card {
+      border: 1px solid rgba(117, 106, 255, .30);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 18% 0%, rgba(103, 197, 255, .14), transparent 34%),
+        linear-gradient(180deg, rgba(37, 32, 100, .98), rgba(18, 15, 51, .98));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .045), var(--shadow);
+    }
+
+    .account-hero {
+      padding: 16px;
+      display: grid;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .account-balance-card,
+    .deposit-balance-card {
+      border: 1px solid rgba(32, 225, 150, .30);
+      border-radius: 8px;
+      background: linear-gradient(135deg, rgba(16, 200, 138, .12), rgba(30, 120, 255, .10));
+      padding: 14px;
+    }
+
+    .account-balance-card span,
+    .deposit-balance-card span {
+      display: block;
+      color: #22e59b;
+      font-size: 11px;
+      font-weight: 950;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .account-balance-card strong,
+    .deposit-balance-card strong {
+      display: block;
+      font-size: 28px;
+      line-height: 1;
+      color: #5ef6c2;
+    }
+
+    .account-stat-grid,
+    .deposit-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .account-stat,
+    .deposit-summary-card {
+      min-height: 82px;
+      border: 1px solid rgba(117, 106, 255, .28);
+      border-radius: 8px;
+      background: rgba(13, 11, 31, .72);
+      padding: 11px;
+      display: grid;
+      align-content: center;
+      gap: 7px;
+    }
+
+    .account-stat span,
+    .deposit-summary-card span {
+      color: #b9c1df;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      line-height: 1.25;
+    }
+
+    .account-stat strong,
+    .deposit-summary-card strong {
+      color: #fff;
+      font-size: 18px;
+      line-height: 1.05;
+      overflow-wrap: anywhere;
+    }
+
+    .deposit-history-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .deposit-history-head h1 {
+      margin: 0;
+      font-size: 24px;
+      line-height: 1.1;
+    }
+
+    .deposit-history-card {
+      padding: 14px;
+      display: grid;
+      gap: 13px;
+    }
+
+    .deposit-card-top,
+    .deposit-card-mid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: start;
+    }
+
+    .deposit-card-amount {
+      text-align: right;
+      font-size: 20px;
+      line-height: 1.05;
+      font-weight: 950;
+    }
+
+    .deposit-card-amount small {
+      display: block;
+      color: #c0c7e7;
+      font-size: 10px;
+      margin-top: 3px;
+    }
+
+    .deposit-card-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      border-top: 1px solid rgba(117, 106, 255, .18);
+      padding-top: 12px;
+    }
+
+    .deposit-field {
+      display: grid;
+      gap: 4px;
+      min-width: 0;
+      font-size: 12px;
+    }
+
+    .deposit-field strong {
+      color: #b9c1df;
+      font-weight: 850;
+    }
+
+    .deposit-field span {
+      font-weight: 900;
+      overflow-wrap: anywhere;
+    }
+
+    .profile {
+      padding: 0;
+    }
+
+    .action-card {
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .action-item {
+      min-height: 54px;
+      padding: 0 16px;
+      background: rgba(13, 11, 31, .40);
+    }
+
+    .action-item strong {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .product-detail-card {
+      padding: 18px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .product-detail-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 12px;
+    }
+
+    .product-detail-card .detail-media {
+      width: 64px;
+      height: 64px;
+      margin: 0;
+      border: 1px solid rgba(117, 106, 255, .26);
+      background: rgba(11, 10, 30, .64);
+      font-size: 32px;
+    }
+
+    .product-detail-card .detail-title {
+      margin: 0;
+      font-size: 23px;
+    }
+
+    .product-note-card {
+      border-left: 3px solid #6957ff;
+      background: rgba(35, 31, 84, .58);
+    }
+
+    .buy-panel {
+      padding: 16px;
+      display: grid;
+      gap: 14px;
+      box-shadow: none;
+    }
+
+    .buy-total-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .buy-total-row span {
+      color: #b9c1df;
+      font-size: 11px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-weight: 900;
+    }
+
+    .buy-total-row strong {
+      color: #745fff;
+      font-size: 28px;
+      line-height: 1;
+    }
+
+    .qty {
+      margin: 0;
+      grid-template-columns: 42px minmax(64px, 1fr) 42px;
+      width: 100%;
+    }
+
+    .qty button,
+    .qty input {
+      background: rgba(8, 8, 24, .72);
+      border-color: rgba(117, 106, 255, .28);
+    }
+
+    .sticky-buy {
+      position: static;
+      margin-top: 0;
+      box-shadow: 0 12px 24px rgba(98, 80, 244, .22);
+    }
+
+    .sheet-backdrop {
+      background: rgba(0, 0, 0, .64);
+      align-items: flex-end;
+    }
+
+    .sheet {
+      max-width: 380px;
+      border-radius: 8px 8px 0 0;
+      background:
+        radial-gradient(circle at 50% -10%, rgba(98, 80, 244, .18), transparent 42%),
+        linear-gradient(180deg, #100e2a, #090819);
+      border-color: rgba(117, 106, 255, .28);
+      padding: 18px;
+    }
+
+    .sheet-title {
+      font-size: 22px;
+    }
+
+    .checkout-card {
+      padding: 16px;
+      display: grid;
+      gap: 14px;
+      margin-bottom: 14px;
+      box-shadow: none;
+    }
+
+    .checkout-main-row,
+    .checkout-total-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .checkout-product-name {
+      font-size: 16px;
+      font-weight: 950;
+      line-height: 1.25;
+      overflow-wrap: anywhere;
+    }
+
+    .checkout-price {
+      font-size: 24px;
+      font-weight: 950;
+      line-height: 1;
+      color: #fff;
+    }
+
+    .checkout-total-row {
+      border-top: 1px solid rgba(117, 106, 255, .18);
+      padding-top: 12px;
+    }
+
+    .checkout-total-row span {
+      color: #b9c1df;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .checkout-total-row strong {
+      color: #745fff;
+      font-size: 28px;
+      line-height: 1;
+    }
+
+    .checkout-pay-card {
+      width: 100%;
+      min-height: 74px;
+      border: 1px solid rgba(117, 106, 255, .24);
+      border-radius: 8px;
+      background: rgba(13, 11, 31, .70);
+      padding: 12px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+      text-align: left;
+    }
+
+    .checkout-pay-card strong {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .checkout-pay-card span {
+      color: #b9c1df;
+      font-size: 12px;
+      line-height: 1.3;
+    }
+
+    .checkout-pay-card .price {
+      color: #5ef6c2;
+      font-size: 16px;
+    }
+
+    .deposit-topup-hero {
+      padding: 18px;
+      display: grid;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .deposit-topup-hero h2 {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.05;
+    }
+
+    .pill-label {
+      display: inline-flex;
+      width: max-content;
+      align-items: center;
+      min-height: 26px;
+      border: 1px solid rgba(117, 106, 255, .36);
+      border-radius: 999px;
+      background: rgba(98, 80, 244, .14);
+      color: #8d82ff;
+      padding: 0 12px;
+      font-size: 10px;
+      font-weight: 950;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .trust-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      color: #b9c1df;
+      font-size: 11px;
+      line-height: 1.25;
+      font-weight: 800;
+    }
+
+    .step-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 12px;
+      font-size: 17px;
+      font-weight: 950;
+    }
+
+    .step-title b {
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      background: rgba(98, 80, 244, .32);
+      color: #8d82ff;
+    }
+
+    .pay-option {
+      min-height: 72px;
+      background: rgba(16, 14, 36, .88);
+      border-color: rgba(117, 106, 255, .24);
+      justify-content: space-between;
+    }
+
+    .pay-option::after {
+      content: "›";
+      color: #7780aa;
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .pay-option.active {
+      border-color: rgba(32, 225, 150, .42);
+      background: rgba(32, 225, 150, .08);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .04), 0 0 0 1px rgba(32, 225, 150, .12);
+    }
+
+    .bottom-nav {
+      background: transparent;
+      border-top: 0;
+      padding: 0 12px calc(env(safe-area-inset-bottom) + 12px);
+      pointer-events: none;
+    }
+
+    .nav-inner {
+      max-width: 350px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      padding: 9px 10px;
+      border: 1px solid rgba(117, 106, 255, .22);
+      border-radius: 8px;
+      background: rgba(11, 10, 30, .94);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, .36), inset 0 1px 0 rgba(255, 255, 255, .04);
+      pointer-events: auto;
+    }
+
+    .nav-btn {
+      min-height: 52px;
+      border-radius: 8px;
+      color: #aeb7d5;
+    }
+
+    .nav-btn.active {
+      color: #745fff;
+      background: rgba(98, 80, 244, .18);
+    }
+
+    @media (max-width: 360px) {
+      .account-stat-grid,
+      .deposit-summary-grid,
+      .trust-row {
+        grid-template-columns: 1fr;
+      }
+
+      .deposit-card-grid,
+      .checkout-main-row,
+      .checkout-total-row,
+      .checkout-pay-card {
+        grid-template-columns: 1fr;
+      }
+
+      .deposit-card-amount,
+      .checkout-price {
+        text-align: left;
+      }
+    }
   </style>
 </head>
 <body class="app-booting">
@@ -1838,22 +2820,19 @@
 
     <section id="notice" class="notice" hidden></section>
 
-    <section id="home" class="screen active"></section>
-    <section id="shop" class="screen"></section>
+    <section id="home" class="screen"></section>
+    <section id="shop" class="screen active"></section>
     <section id="orders" class="screen"></section>
     <section id="wallet" class="screen"></section>
     <section id="me" class="screen"></section>
-    <section id="liveSessions" class="screen"></section>
     <section id="product" class="screen"></section>
   </main>
 
   <nav class="bottom-nav" aria-label="Primary">
     <div class="nav-inner">
-      <button class="nav-btn active" type="button" data-tab="home"><span class="nav-icon" data-emoji-key="home" data-fallback="🏠">🏠</span><span>Home</span></button>
-      <button class="nav-btn" type="button" data-tab="shop"><span class="nav-icon" data-emoji-key="shop" data-fallback="🛒">🛒</span><span>Shop</span></button>
-      <button class="nav-btn" type="button" data-tab="orders"><span class="nav-icon" data-emoji-key="orders" data-fallback="💳">💳</span><span>Orders</span></button>
-      <button class="nav-btn" type="button" data-tab="wallet"><span class="nav-icon" data-emoji-key="wallet" data-fallback="💰">💰</span><span>Wallet</span></button>
-      <button class="nav-btn" type="button" data-tab="me"><span class="nav-icon" data-emoji-key="me" data-fallback="⚙">⚙</span><span>Settings</span></button>
+      <button class="nav-btn active" type="button" data-tab="shop"><span class="nav-icon" data-emoji-key="shop" data-fallback="S">S</span><span>Shop</span></button>
+      <button class="nav-btn" type="button" data-tab="orders"><span class="nav-icon" data-emoji-key="orders" data-fallback="O">O</span><span>Orders</span></button>
+      <button class="nav-btn" type="button" data-tab="me"><span class="nav-icon" data-emoji-key="me" data-fallback="A">A</span><span>Account</span></button>
     </div>
   </nav>
 
@@ -1868,25 +2847,26 @@
     const state = {
       ready: false,
       busy: false,
-      tab: "home",
-      previousTab: "home",
+      tab: "shop",
+      previousTab: "shop",
       query: "",
+      orderSearch: "",
+      depositSearch: "",
+      expandedOrderId: null,
       qty: new Map(),
       product: null,
       checkout: null,
       depositMethod: "binance_pay",
-      bot: { name: "Loguetown Shoppie", username: "Loguetown_bot", supportUsername: "urweebboii", logoUrl: "" },
-      user: { id: "", username: "", balanceUsdt: "0", joinedAt: "", role: "user", roleLabel: "User", isReseller: false, roleTags: [{ role: "user", label: "User" }], language: "en", languageLabel: "English", currencyCode: "USD", currencyLabel: "USD - US Dollar" },
-      stats: { totalDepositedUsdt: "0", ordersCount: 0, depositsCount: 0, transactionsCount: 0, liveSessionsCount: 0 },
+      bot: { name: "Loguetown Shoppie", username: "Loguetown_bot", supportUsername: "anubhav_seller_bot", logoUrl: "" },
+      user: { id: "", username: "", balanceUsdt: "0", joinedAt: "", role: "user", roleLabel: "User", isReseller: false, roleTags: [{ role: "user", label: "User" }], language: "en", languageLabel: "English", currencyCode: "USD", currencyLabel: "USD - US Dollar (United States)", currencyRate: 1 },
+      stats: { totalDepositedUsdt: "0", ordersCount: 0, depositsCount: 0, transactionsCount: 0 },
       settings: { languageOptions: [], currencyOptions: [], selectedLanguage: "en", selectedCurrency: "USD" },
       products: [],
       orders: [],
       deposits: [],
       transactions: [],
-      liveSessions: [],
-      liveSessionsLoaded: false,
-      liveSessionsLoading: false,
       depositMethods: [],
+      disabledPaymentMethods: [],
       customEmojiIds: {},
       customEmojiUrls: {},
       customEmojiObjectUrls: {},
@@ -1923,6 +2903,29 @@
       return num.toLocaleString("en-US", { maximumFractionDigits: 3 });
     }
 
+    function currentCurrencyCode() {
+      return String(state.user.currencyCode || state.settings.selectedCurrency || "USD").toUpperCase();
+    }
+
+    function currentCurrencyRate() {
+      const rate = Number(state.user.currencyRate || 1);
+      return Number.isFinite(rate) && rate > 0 ? rate : 1;
+    }
+
+    function currencyAmount(valueUsdt) {
+      return money(Number(valueUsdt || 0) * currentCurrencyRate());
+    }
+
+    function currencyMoney(valueUsdt) {
+      return currencyAmount(valueUsdt) + " " + currentCurrencyCode();
+    }
+
+    function signedCurrencyMoney(valueUsdt, tone) {
+      const value = Number(valueUsdt || 0);
+      const prefix = tone === "credit" && value > 0 ? "+" : tone === "debit" && value > 0 ? "-" : "";
+      return prefix + currencyMoney(Math.abs(value));
+    }
+
     function initials(name) {
       const raw = String(name || "L").replace(/^@+/, "").trim();
       return (raw.slice(0, 1) || "L").toUpperCase();
@@ -1941,6 +2944,10 @@
 
     function methodById(id) {
       return state.depositMethods.find((method) => method.id === id) || state.depositMethods[0] || null;
+    }
+
+    function paymentMethodDisabled(id) {
+      return (state.disabledPaymentMethods || []).includes(id);
     }
 
     function customEmojiAssetUrl(customEmojiId) {
@@ -2023,7 +3030,7 @@
     function updateBuyButton(product) {
       const button = document.querySelector('[data-action="buy"]');
       if (!button || !product || state.busy) return;
-      button.innerHTML = customEmoji("buy", "🛒") + "Buy · " + money(totalFor(product)) + " USDT";
+      button.innerHTML = customEmoji("buy", "cart") + "Checkout · " + currencyMoney(totalFor(product));
     }
 
     function syncProductQtyInput() {
@@ -2073,23 +3080,14 @@
       if (state.tab === "home") return state.bot.name || "Loguetown Shoppie";
       if (state.tab === "shop") return "Shop";
       if (state.tab === "orders") return "Orders";
-      if (state.tab === "wallet") return "Wallet";
-      if (state.tab === "me") return "Settings";
-      if (state.tab === "liveSessions") return "Live Sessions";
+      if (state.tab === "wallet") return "Deposit history";
+      if (state.tab === "me") return "Account";
       return "Product";
     }
 
     function setTab(tab, options = {}) {
       if (tab === "product" && options.product) {
         state.product = options.product;
-      }
-      if (tab === "liveSessions" && !state.liveSessionsLoaded && !state.liveSessionsLoading) {
-        loadLiveSessions().catch((error) => {
-          state.liveSessionsLoaded = true;
-          state.liveSessionsLoading = false;
-          showToast(displayErrorMessage(error), true);
-          render();
-        });
       }
       if (tab !== "product") {
         state.previousTab = tab;
@@ -2098,7 +3096,7 @@
       byId("pageTitle").textContent = pageTitle();
       document.querySelectorAll(".screen").forEach((screen) => screen.classList.toggle("active", screen.id === tab));
       document.querySelectorAll(".nav-btn").forEach((btn) => btn.classList.toggle("active", btn.dataset.tab === tab));
-      byId("backBtn").style.visibility = tab === "home" ? "hidden" : "visible";
+      byId("backBtn").style.visibility = ["shop", "orders", "me"].includes(tab) ? "hidden" : "visible";
       render();
       window.scrollTo({ top: 0, behavior: "instant" });
     }
@@ -2118,14 +3116,14 @@
         .map((item) => Number(item.price || item.priceUsdt || 0))
         .filter((value) => Number.isFinite(value) && value > 0);
       if (!prices.length) return "Variants";
-      return "From " + money(Math.min(...prices)) + " USDT";
+      return "From " + currencyMoney(Math.min(...prices));
     }
 
     function productCard(product) {
       const variants = productVariants(product);
       const hasVariants = product.hasVariants || variants.length > 0;
       const reseller = !hasVariants && product.usesResellerPrice ? '<span class="reseller-chip">Reseller</span>' : '';
-      const priceLabel = hasVariants ? variantPriceSummary(product) : escapeHtml(product.priceUsdt) + ' USDT';
+      const priceLabel = hasVariants ? variantPriceSummary(product) : escapeHtml(currencyMoney(product.price || product.priceUsdt || 0));
       const stockLabel = hasVariants
         ? String(variants.length || product.variantCount || 0) + ' options'
         : escapeHtml(product.stockLabel);
@@ -2135,7 +3133,7 @@
           '<h3 class="product-name">' + customEmoji(productEmojiKey(product), "📦") + escapeHtml(product.name) + '</h3>' +
           '<p class="product-desc">' + escapeHtml(product.description || "No product note") + '</p>' +
           '<div class="row"><span class="price">' + priceLabel + '</span><span class="stock">' + stockLabel + '</span></div>' +
-          (reseller ? '<div class="row" style="margin-top:6px"><span class="detail-price-note">Retail ' + escapeHtml(product.retailPriceUsdt || product.priceUsdt) + ' USDT</span>' + reseller + '</div>' : '') +
+          (reseller ? '<div class="row" style="margin-top:6px"><span class="detail-price-note">Retail ' + escapeHtml(currencyMoney(product.retailPrice || product.retailPriceUsdt || 0)) + '</span>' + reseller + '</div>' : '') +
         '</div>' +
         '<span class="product-open" aria-hidden="true">&rsaquo;</span>' +
       '</article>';
@@ -2163,7 +3161,7 @@
           '<div class="brand-icon">' + logoHtml() + '</div>' +
           '<p class="eyebrow">Welcome back,</p>' +
           '<h2 class="hero-name">' + escapeHtml(displayName()) + '</h2>' +
-          '<div class="hero-balance"><strong>' + money(state.user.balanceUsdt) + '</strong><span>USDT</span></div>' +
+          '<div class="hero-balance"><strong>' + currencyAmount(state.user.balanceUsdt) + '</strong><span>' + escapeHtml(currentCurrencyCode()) + '</span></div>' +
           '<div class="label">Wallet balance</div>' +
           '<div class="hero-actions">' +
             '<button class="btn ghost" type="button" data-action="deposit">' + customEmoji("deposit", "💰") + 'Deposit</button>' +
@@ -2194,26 +3192,118 @@
     }
 
     function renderOrders() {
+      if (state.expandedOrderId === null && state.orders[0]) {
+        state.expandedOrderId = state.orders[0].id;
+      }
       byId("orders").innerHTML =
-        '<div class="stack">' +
-          (state.orders.length ? state.orders.map(orderCard).join("") : emptyHtml("No orders yet. Buy a product and it will appear here.")) +
-        '</div>';
+        '<div class="orders-head">' +
+          '<h1>Order history</h1>' +
+          '<label class="order-search-wrap">' +
+            '<span aria-hidden="true">⌕</span>' +
+            '<input type="search" data-action="orderSearch" value="' + escapeHtml(state.orderSearch || "") + '" placeholder="Search by order # or product name.">' +
+          '</label>' +
+        '</div>' +
+        (state.orders.length
+          ? '<div class="stack order-history-list">' + state.orders.map(orderCard).join("") + '</div>' +
+            '<div id="ordersNoResults" class="empty" hidden>No orders match this search.</div>'
+          : emptyHtml("No orders yet. Buy a product and it will appear here."));
+      applyOrderSearchFilter();
     }
 
     function orderCard(order) {
-      return '<button class="order-card order-click" type="button" data-order-id="' + escapeHtml(order.id) + '">' +
-        '<div class="row">' +
-          '<div class="order-title">' + escapeHtml(order.productName) + '</div>' +
-          '<div class="price">' + escapeHtml(order.amountUsdt) + ' USDT</div>' +
-        '</div>' +
-        '<div class="row">' +
-          '<div class="order-meta">Order ID# : ' + escapeHtml(order.ref) + '<br>Qty ' + escapeHtml(order.quantity) + ' &middot; ' + escapeHtml(formatDate(order.createdAt)) + '</div>' +
-          '<span class="order-status-wrap">' +
-            '<span class="status ' + escapeHtml(order.status) + '">' + escapeHtml(order.statusLabel) + '</span>' +
-            '<span class="order-open" aria-hidden="true">&rsaquo;</span>' +
+      const expanded = String(state.expandedOrderId || "") === String(order.id);
+      const searchText = [order.id, order.ref, order.productName, order.statusLabel, order.status].join(" ").toLowerCase();
+      return '<article class="order-history-card" data-order-search="' + escapeHtml(searchText) + '">' +
+        '<button class="order-summary-btn" type="button" data-action="toggleOrder" data-order-id="' + escapeHtml(order.id) + '">' +
+          '<span class="order-summary-main">' +
+            '<span class="order-summary-title"><span>' + escapeHtml(order.productName || "Order") + '</span><span class="order-ref-pill">#' + escapeHtml(rawOrderRefClient(order)) + '</span></span>' +
+            '<span class="order-summary-sub">' + escapeHtml(formatDate(order.createdAt)) + ' · Qty ' + escapeHtml(order.quantity || 1) + '</span>' +
           '</span>' +
+          '<span class="order-summary-price"><span>' + escapeHtml(currencyMoney(order.amountUsdt)) + '</span><span class="status ' + escapeHtml(order.status) + '">' + escapeHtml(order.statusLabel || prettyOrderStatus(order.status)) + '</span></span>' +
+          '<span class="order-chev" aria-hidden="true">' + (expanded ? '⌃' : '⌄') + '</span>' +
+        '</button>' +
+        (expanded ? orderExpandedHtml(order) : '') +
+      '</article>';
+    }
+
+    function rawOrderRefClient(order) {
+      return String(order.ref || order.id || "-").replace(/^#+/, "");
+    }
+
+    function orderExpandedHtml(order) {
+      const items = Array.isArray(order.items) ? order.items.filter(Boolean) : [];
+      const method = order.paymentMethodLabel || order.network || "-";
+      const unitPrice = Number(order.quantity || 0) > 0 ? Number(order.amountUsdt || 0) / Number(order.quantity || 1) : Number(order.amountUsdt || 0);
+      const exactAmount = order.amountUniqueUsdt && order.amountUniqueUsdt !== order.amountUsdt
+        ? orderDetailField("Payment amount", order.amountUniqueUsdt + " USDT")
+        : "";
+      const coupon = order.couponCode
+        ? orderDetailField("Coupon", order.couponCode + " (-" + currencyMoney(order.couponDiscountUsdt || 0) + ")")
+        : "";
+      const reference = order.txHash ? orderDetailField("Reference", order.txHash) : "";
+      const paid = order.paidAt ? orderDetailField("Paid", formatDate(order.paidAt)) : "";
+      const delivered = order.deliveredAt ? orderDetailField("Delivered", formatDate(order.deliveredAt)) : "";
+      return '<div class="order-expanded">' +
+        '<div class="order-detail-grid">' +
+          orderDetailField("Order #", rawOrderRefClient(order)) +
+          orderDetailField("Placed", formatDate(order.createdAt)) +
+          orderDetailField("Quantity", String(order.quantity || 1)) +
+          orderDetailField("Unit price", currencyMoney(unitPrice)) +
+          orderDetailField("Total paid", currencyMoney(order.amountUsdt)) +
+          orderDetailField("Method", method) +
+          exactAmount + paid + delivered + coupon + reference +
         '</div>' +
-      '</button>';
+        '<div class="order-item-count">' + String(items.length || 0) + ' item(s)</div>' +
+        '<div class="order-export-actions">' +
+          '<button class="order-export-btn" type="button" data-action="copyOrderItems" data-order-id="' + escapeHtml(order.id) + '">Copy</button>' +
+          '<button class="order-export-btn active" type="button" data-action="downloadOrderTxt" data-order-id="' + escapeHtml(order.id) + '">TXT</button>' +
+          '<button class="order-export-btn" type="button" data-action="downloadOrderCsv" data-order-id="' + escapeHtml(order.id) + '">CSV</button>' +
+        '</div>' +
+        (items.length ? '<pre class="order-code-preview">' + escapeHtml(items.join("\n")) + '</pre>' : '<p class="small">' + escapeHtml(orderStatusNote(order)) + '</p>') +
+        orderInstructionsHtml(order) +
+      '</div>';
+    }
+
+    function orderDetailField(label, value) {
+      return '<div class="order-detail-field"><strong>' + escapeHtml(label) + '</strong><span>' + escapeHtml(value || "-") + '</span></div>';
+    }
+
+    function orderInstructionsHtml(order) {
+      const lines = instructionLines(order);
+      if (!lines.length) return "";
+      return '<section class="order-instructions">' +
+        '<div class="order-instructions-title">ⓘ Important instructions</div>' +
+        '<div class="order-instruction-box">' +
+          lines.map((line, index) => '<div class="order-instruction-step"><b>' + String(index + 1) + '</b><span>' + escapeHtml(line) + '</span></div>').join("") +
+        '</div>' +
+      '</section>';
+    }
+
+    function instructionLines(order) {
+      const description = String(order.productDescription || "").replace(/\r/g, "\n");
+      const lines = description.split("\n").map((line) => line.replace(/^[-•\d.)\s]+/, "").trim()).filter(Boolean);
+      if (lines.length) return lines.slice(0, 6);
+      if ((order.items || []).length) {
+        return [
+          "Copy your delivered item exactly as shown.",
+          "Use TXT or CSV if you need to save all order details.",
+          "Contact support if the delivered item does not work.",
+        ];
+      }
+      return [];
+    }
+
+    function applyOrderSearchFilter() {
+      const query = String(state.orderSearch || "").trim().toLowerCase();
+      const cards = [...document.querySelectorAll("#orders .order-history-card[data-order-search]")];
+      let visible = 0;
+      for (const card of cards) {
+        const match = !query || String(card.dataset.orderSearch || "").includes(query);
+        card.hidden = !match;
+        if (match) visible += 1;
+      }
+      const noResults = byId("ordersNoResults");
+      if (noResults) noResults.hidden = !query || visible > 0;
     }
 
     function orderStatusNote(order) {
@@ -2240,7 +3330,7 @@
         ? metricRow("Payment amount", order.amountUniqueUsdt + " USDT")
         : "";
       const coupon = order.couponCode
-        ? metricRow("Coupon", order.couponCode + " (-" + (order.couponDiscountUsdt || "0") + " USDT)")
+        ? metricRow("Coupon", order.couponCode + " (-" + currencyMoney(order.couponDiscountUsdt || 0) + ")")
         : "";
       const reference = order.txHash ? metricRow("Reference", order.txHash) : "";
       const paid = order.paidAt ? metricRow("Paid", formatDate(order.paidAt)) : "";
@@ -2256,7 +3346,7 @@
           '<section class="metric-card">' +
             metricRow("Order ID# :", order.ref || ("#" + order.id)) +
             metricRow("Status", order.statusLabel || prettyOrderStatus(order.status)) +
-            metricRow("Amount", (order.amountUsdt || "0") + " USDT") +
+            metricRow("Amount", currencyMoney(order.amountUsdt || 0)) +
             exactAmount +
             metricRow("Quantity", String(order.quantity || 1)) +
             metricRow("Method", method) +
@@ -2272,20 +3362,31 @@
     }
 
     function renderWallet() {
+      const pendingCount = state.deposits.filter(depositIsLive).length;
       byId("wallet").innerHTML =
-        '<section class="wallet-panel">' +
-          '<div class="label">Available balance</div>' +
-          '<div class="wallet-amount">' + money(state.user.balanceUsdt) + ' USDT</div>' +
-          '<div class="wallet-sub">Total deposited: ' + money(state.stats.totalDepositedUsdt) + ' USDT</div>' +
-        '</section>' +
-        '<div class="wallet-actions">' +
-          '<button class="btn full" type="button" data-action="deposit">' + customEmoji("deposit", "$") + 'Make a deposit</button>' +
+        '<div class="deposit-history-head">' +
+          '<h1>Deposit history</h1>' +
+          '<button class="btn" type="button" data-action="deposit">' + customEmoji("deposit", "$") + 'New deposit</button>' +
         '</div>' +
+        '<section class="deposit-summary-grid">' +
+          depositSummaryCard("Total deposited", currencyMoney(state.stats.totalDepositedUsdt)) +
+          depositSummaryCard("Pending", String(pendingCount)) +
+          depositSummaryCard("Total entries", String(state.stats.depositsCount || state.deposits.length)) +
+        '</section>' +
         walletLiveHtml() +
-        '<div class="label">Recent deposits</div>' +
-        '<section class="stack">' +
+        '<label class="order-search-wrap">' +
+          '<span aria-hidden="true">⌕</span>' +
+          '<input type="search" data-action="depositSearch" value="' + escapeHtml(state.depositSearch || "") + '" placeholder="Search by # / TxID / network / status">' +
+        '</label>' +
+        '<section class="stack" style="margin-top:14px">' +
           (state.deposits.length ? state.deposits.map(depositCard).join("") : emptyHtml("No deposits yet.")) +
-        '</section>';
+        '</section>' +
+        '<div id="depositsNoResults" class="empty" hidden>No deposits match this search.</div>';
+      applyDepositSearchFilter();
+    }
+
+    function depositSummaryCard(label, value) {
+      return '<article class="deposit-summary-card"><span>' + escapeHtml(label) + '</span><strong>' + escapeHtml(value) + '</strong></article>';
     }
 
     function walletTone(status, amount, reviewStage = "") {
@@ -2387,22 +3488,36 @@
 
     function depositCard(deposit) {
       const tone = walletTone(deposit.status, deposit.amountUsdt, deposit.reviewStage);
-      const amount = escapeHtml(signedWalletAmount(deposit.amountUsdt, tone)) + " " + escapeHtml(deposit.asset);
-      const reference = deposit.reference ? '<br>Ref: ' + escapeHtml(deposit.reference) : "";
-      return '<button class="order-card order-click" type="button" data-deposit-id="' + escapeHtml(deposit.id) + '">' +
-        '<div class="row">' +
-          '<div class="order-title">' + escapeHtml(deposit.network) + '</div>' +
-          '<div class="price amount-state ' + escapeHtml(tone) + '">' + amount + '</div>' +
+      const amount = escapeHtml(signedWalletAmount(deposit.amountUsdt, tone)) + " " + escapeHtml(deposit.creditedAsset || "USDT");
+      const ref = String(deposit.externalReference || deposit.txHash || deposit.reference || "-");
+      const searchText = [deposit.id, ref, deposit.network, deposit.statusLabel, deposit.status, deposit.asset].join(" ").toLowerCase();
+      return '<button class="deposit-history-card order-click" type="button" data-deposit-id="' + escapeHtml(deposit.id) + '" data-deposit-search="' + escapeHtml(searchText) + '">' +
+        '<div class="deposit-card-top">' +
+          '<div><span class="deposit-ref-pill">#' + escapeHtml(String(deposit.id || "-")) + '</span> <span class="status ' + escapeHtml(deposit.status) + '">' + escapeHtml(deposit.statusLabel) + '</span>' +
+          '<div class="order-meta" style="margin-top:8px">' + escapeHtml(formatDate(deposit.createdAt)) + '</div></div>' +
+          '<div class="deposit-card-amount amount-state ' + escapeHtml(tone) + '">' + amount + '<small>' + escapeHtml(currencyMoney(deposit.amountUsdt)) + '</small></div>' +
         '</div>' +
-        '<div class="row">' +
-          '<div class="order-meta">' + escapeHtml(formatDate(deposit.createdAt)) + reference + '</div>' +
-          '<span class="order-status-wrap">' +
-            '<span class="status ' + escapeHtml(deposit.status) + '">' + escapeHtml(deposit.statusLabel) + '</span>' +
-            '<span class="order-open" aria-hidden="true">&rsaquo;</span>' +
-          '</span>' +
+        '<div class="deposit-card-grid">' +
+          '<div class="deposit-field"><strong>Deposit #</strong><span>' + escapeHtml(String(deposit.id || "-")) + '</span></div>' +
+          '<div class="deposit-field"><strong>Status</strong><span>' + escapeHtml(deposit.statusLabel || prettyOrderStatus(deposit.status)) + '</span></div>' +
+          '<div class="deposit-field"><strong>Network</strong><span>' + escapeHtml(deposit.network || "-") + '</span></div>' +
+          '<div class="deposit-field"><strong>Transaction</strong><span>' + escapeHtml(ref) + '</span></div>' +
         '</div>' +
         depositProgressHtml(deposit) +
       '</button>';
+    }
+
+    function applyDepositSearchFilter() {
+      const query = String(state.depositSearch || "").trim().toLowerCase();
+      const cards = [...document.querySelectorAll("#wallet .deposit-history-card[data-deposit-search]")];
+      let visible = 0;
+      for (const card of cards) {
+        const match = !query || String(card.dataset.depositSearch || "").includes(query);
+        card.hidden = !match;
+        if (match) visible += 1;
+      }
+      const noResults = byId("depositsNoResults");
+      if (noResults) noResults.hidden = !query || visible > 0;
     }
 
     function depositStatusNote(deposit) {
@@ -2422,7 +3537,7 @@
 
     function showDepositDetailsSheet(deposit) {
       const tone = walletTone(deposit.status, deposit.amountUsdt, deposit.reviewStage);
-      const amount = signedWalletAmount(deposit.amountUsdt, tone) + " " + (deposit.asset || "USDT");
+      const amount = signedWalletAmount(deposit.amountUsdt, tone) + " " + (deposit.creditedAsset || "USDT");
       const uniqueAmount = deposit.amountUniqueUsdt && deposit.amountUniqueUsdt !== deposit.amountUsdt
         ? metricRow("Payment amount", deposit.amountUniqueUsdt + " USDT")
         : "";
@@ -2462,7 +3577,7 @@
       return '<article class="transaction-card">' +
         '<div class="row">' +
           '<div class="order-title">' + escapeHtml(tx.label || tx.kind || "Wallet update") + '</div>' +
-          '<div class="tx-amount ' + escapeHtml(direction) + '">' + escapeHtml(tx.signedAmountUsdt || "0 USDT") + '</div>' +
+          '<div class="tx-amount ' + escapeHtml(direction) + '">' + escapeHtml(signedCurrencyMoney(tx.amountUsdt, direction)) + '</div>' +
         '</div>' +
         '<div class="order-meta">' + escapeHtml(formatDate(tx.createdAt)) + reference + '</div>' +
       '</article>';
@@ -2482,72 +3597,42 @@
 
     function renderMe() {
       byId("me").innerHTML =
-        '<section class="profile">' +
+        '<section class="account-hero">' +
+          '<div class="profile">' +
           '<div class="profile-head">' +
             '<div class="avatar">' + logoHtml() + '</div>' +
             '<div class="profile-main"><div class="profile-name-line"><div class="profile-name">' + escapeHtml(displayName()) + '</div>' + roleBadge() + '</div>' +
             '<div class="small">' + (state.user.username ? "@" + escapeHtml(state.user.username) : "Telegram user") + '</div></div>' +
           '</div>' +
+          '</div>' +
+          '<div class="account-balance-card"><span>Current balance</span><strong>' + escapeHtml(currencyMoney(state.user.balanceUsdt)) + '</strong></div>' +
+        '</section>' +
+        '<section class="account-stat-grid">' +
+          accountStat("Orders", String(state.stats.ordersCount || state.orders.length)) +
+          accountStat("Deposits", String(state.stats.depositsCount || state.deposits.length)) +
+          accountStat("Deposited", currencyMoney(state.stats.totalDepositedUsdt || "0")) +
+        '</section>' +
+        '<div class="label">Account</div>' +
+        '<section class="action-card">' +
+          actionRow("Order history", "orders") +
+          actionRow("Deposit history", "wallet") +
+          actionRow("Deposit", "deposit") +
+          actionRow("Transactions", "transactions") +
         '</section>' +
         '<div class="label">Preferences</div>' +
         '<section class="action-card">' +
           actionRow("Language", "languageSettings", currentLanguageLabel()) +
           actionRow("Currency", "currencySettings", currentCurrencyLabel()) +
         '</section>' +
-        '<div class="label">Account</div>' +
-        '<section class="metric-card">' +
-          metricRow("Balance", money(state.user.balanceUsdt) + " USDT") +
-          metricRow("Total deposited", money(state.stats.totalDepositedUsdt) + " USDT") +
-          metricRow("Orders", String(state.stats.ordersCount || state.orders.length)) +
-          metricRow("Deposits", String(state.stats.depositsCount || state.deposits.length)) +
-          metricRow("Transactions", String(state.stats.transactionsCount || state.transactions.length)) +
-          metricRow("User ID", "#" + escapeHtml(state.user.id || "-")) +
-        '</section>' +
-        '<div class="label">Activity</div>' +
-        '<section class="action-card">' +
-          actionRow("My deposits", "wallet") +
-          actionRow("LIVE SESSIONS", "liveSessions", String(state.stats.liveSessionsCount || 0)) +
-          actionRow("Transactions", "transactions") +
-        '</section>' +
         '<div class="label">Actions</div>' +
         '<section class="action-card">' +
-          actionRow("Message owner", "support") +
+          actionRow("Bot support", "support") +
           actionRow("Open bot", "openBot") +
         '</section>';
     }
 
-    function liveSessionCard(session) {
-      const status = String(session.status || "closed").toLowerCase();
-      const closedBy = session.closedBy && session.closedBy !== "-" ? "Closed by " + session.closedBy : "Closed";
-      const download = session.canDownload
-        ? '<button class="btn secondary full" type="button" data-action="downloadLiveSession" data-session-id="' + escapeHtml(session.id) + '">Download chat summary</button>'
-        : '<button class="btn secondary full" type="button" disabled>No transcript file</button>';
-      return '<article class="session-card">' +
-        '<div class="session-head">' +
-          '<div><div class="session-subject">' + escapeHtml(session.subject || "Live Support") + '</div>' +
-          '<div class="session-meta">' +
-            '<span>Date: ' + escapeHtml(formatDate(session.startedAt)) + '</span>' +
-            '<span>Duration: ' + escapeHtml(session.durationLabel || "0s") + '</span>' +
-            '<span>Messages: ' + escapeHtml(session.messageCount || 0) + '</span>' +
-          '</div></div>' +
-          '<span class="status ' + escapeHtml(status) + '">' + escapeHtml(closedBy) + '</span>' +
-        '</div>' +
-        '<div class="session-actions">' + download + '</div>' +
-      '</article>';
-    }
-
-    function renderLiveSessions() {
-      if (state.liveSessionsLoading) {
-        byId("liveSessions").innerHTML = '<div class="skeleton"></div><br><div class="skeleton"></div>';
-        return;
-      }
-      const sessions = state.liveSessions || [];
-      byId("liveSessions").innerHTML =
-        '<div class="label">Live session history</div>' +
-        '<section class="stack">' +
-          (sessions.length ? sessions.map(liveSessionCard).join("") : emptyHtml("No live sessions recorded yet.")) +
-        '</section>' +
-        '<button class="btn secondary full" type="button" data-action="refreshLiveSessions" style="margin-top:12px">Refresh sessions</button>';
+    function accountStat(label, value) {
+      return '<article class="account-stat"><span>' + escapeHtml(label) + '</span><strong>' + escapeHtml(value) + '</strong></article>';
     }
 
     function renderProduct() {
@@ -2559,11 +3644,14 @@
       const variants = productVariants(product);
       if (product.hasVariants || variants.length > 0) {
         byId("product").innerHTML =
-          productMedia(product, true) +
-          '<h1 class="detail-title">' + customEmoji(productEmojiKey(product), "box") + escapeHtml(product.name) + '</h1>' +
-          '<div class="stock">' + escapeHtml(String(variants.length || product.variantCount || 0)) + ' options available</div>' +
-          '<div class="label">Description</div>' +
-          '<div class="detail-box">' + escapeHtml(product.description || "Choose one option below.") + '</div>' +
+          '<section class="product-detail-card">' +
+            '<div class="product-detail-head">' +
+              productMedia(product, true) +
+              '<h1 class="detail-title">' + customEmoji(productEmojiKey(product), "box") + escapeHtml(product.name) + '</h1>' +
+              '<span class="stock-badge">' + escapeHtml(String(variants.length || product.variantCount || 0)) + ' options available</span>' +
+            '</div>' +
+            '<div class="detail-box product-note-card">' + escapeHtml(product.description || "Choose one option below.") + '</div>' +
+          '</section>' +
           '<div class="label">Variants</div>' +
           '<section class="product-list">' +
             (variants.length ? variants.map(productCard).join("") : emptyHtml("No active variants yet.")) +
@@ -2573,30 +3661,35 @@
       const qty = qtyFor(product);
       const total = totalFor(product);
       const priceNote = product.usesResellerPrice
-        ? '<div class="detail-price-note">Reseller price. Retail ' + escapeHtml(product.retailPriceUsdt || product.priceUsdt) + ' USDT</div>'
+        ? '<div class="detail-price-note">Reseller price. Retail ' + escapeHtml(currencyMoney(product.retailPrice || product.retailPriceUsdt || 0)) + '</div>'
         : '';
       byId("product").innerHTML =
-        productMedia(product, true) +
-        '<h1 class="detail-title">' + customEmoji(productEmojiKey(product), "📦") + escapeHtml(product.name) + '</h1>' +
-        '<div class="detail-price">' + money(product.price) + ' USDT</div>' +
-        priceNote +
-        '<div class="stock">' + escapeHtml(product.stockLabel) + '</div>' +
-        '<div class="detail-grid">' +
-          miniStat("Type", product.fulfillmentType === "manual" ? "Manual" : "Auto") +
-          miniStat("Limit", product.limitLabel) +
-          (product.customFieldsCount ? miniStat("Details", String(product.customFieldsCount) + " required") : "") +
-        '</div>' +
-        '<div class="label">Description</div>' +
-        '<div class="detail-box">' + escapeHtml(product.description || "No product note") + '</div>' +
-        '<div class="label">Quantity</div>' +
-        '<div class="qty">' +
-          '<button type="button" data-action="qtyDec" ' + (qty <= product.minQty ? "disabled" : "") + '>-</button>' +
-          '<input id="qtyInput" type="number" inputmode="numeric" pattern="[0-9]*" min="' + escapeHtml(product.minQty) + '" max="' + escapeHtml(product.maxQty) + '" value="' + qty + '" data-action="qtyInput" aria-label="Quantity">' +
-          '<button type="button" data-action="qtyInc" ' + (qty >= product.maxQty ? "disabled" : "") + '>+</button>' +
-        '</div>' +
-        '<button class="btn full sticky-buy" type="button" data-action="buy" ' + (!product.canOrder || state.busy ? "disabled" : "") + '>' +
-          (state.busy ? "Processing..." : customEmoji("buy", "🛒") + "Buy · " + money(total) + " USDT") +
-        '</button>';
+        '<section class="product-detail-card">' +
+          '<div class="product-detail-head">' +
+            productMedia(product, true) +
+            '<h1 class="detail-title">' + customEmoji(productEmojiKey(product), "box") + escapeHtml(product.name) + '</h1>' +
+            '<span class="stock-badge">' + escapeHtml(product.stockLabel) + '</span>' +
+          '</div>' +
+          '<div class="detail-grid">' +
+            miniStat("Type", product.fulfillmentType === "manual" ? "Manual" : "Auto") +
+            miniStat("Limit", product.limitLabel) +
+            (product.customFieldsCount ? miniStat("Details", String(product.customFieldsCount) + " required") : "") +
+          '</div>' +
+          '<div class="detail-box product-note-card">' + escapeHtml(product.description || "No product note") + '</div>' +
+          priceNote +
+          '<section class="buy-panel">' +
+            '<div class="buy-total-row"><div><span>Unit price</span><strong>' + escapeHtml(currencyMoney(product.price)) + '</strong><div class="small">per item</div></div>' +
+            '<div class="qty">' +
+              '<button type="button" data-action="qtyDec" ' + (qty <= product.minQty ? "disabled" : "") + '>-</button>' +
+              '<input id="qtyInput" type="number" inputmode="numeric" pattern="[0-9]*" min="' + escapeHtml(product.minQty) + '" max="' + escapeHtml(product.maxQty) + '" value="' + qty + '" data-action="qtyInput" aria-label="Quantity">' +
+              '<button type="button" data-action="qtyInc" ' + (qty >= product.maxQty ? "disabled" : "") + '>+</button>' +
+            '</div></div>' +
+            '<div class="buy-total-row"><span>Total payable</span><strong>' + escapeHtml(currencyMoney(total)) + '</strong></div>' +
+            '<button class="btn full sticky-buy" type="button" data-action="buy" ' + (!product.canOrder || state.busy ? "disabled" : "") + '>' +
+              (state.busy ? "Processing..." : customEmoji("buy", "cart") + "Checkout · " + currencyMoney(total)) +
+            '</button>' +
+          '</section>' +
+        '</section>';
     }
 
     function metricRow(label, value) {
@@ -2645,12 +3738,11 @@
       if (state.tab === "orders") renderOrders();
       if (state.tab === "wallet") renderWallet();
       if (state.tab === "me") renderMe();
-      if (state.tab === "liveSessions") renderLiveSessions();
       if (state.tab === "product") renderProduct();
     }
 
     function loading() {
-      byId("home").innerHTML = '<div class="skeleton"></div><br><div class="skeleton"></div><br><div class="skeleton"></div>';
+      (byId(state.tab) || byId("shop")).innerHTML = '<div class="skeleton"></div><br><div class="skeleton"></div><br><div class="skeleton"></div>';
     }
 
     function enableCloseWarning() {
@@ -2689,6 +3781,7 @@
       state.deposits = payload.deposits || [];
       state.transactions = payload.transactions || [];
       state.depositMethods = payload.depositMethods || [];
+      state.disabledPaymentMethods = payload.disabledPaymentMethods || [];
       state.customEmojiIds = payload.customEmojiIds || {};
       state.customEmojiUrls = payload.customEmojiUrls || {};
       await preloadCustomEmojis();
@@ -2714,50 +3807,6 @@
       return payload;
     }
 
-    async function loadLiveSessions(force = false) {
-      if (state.liveSessionsLoading) return;
-      if (state.liveSessionsLoaded && !force) return;
-      state.liveSessionsLoading = true;
-      render();
-      try {
-        const response = await fetch(API_BASE + "/api/live-sessions", {
-          headers: authHeader(),
-          cache: "no-store",
-        });
-        const payload = await response.json();
-        if (!response.ok || !payload.ok) throw new Error(payload.error || "Could not load live sessions.");
-        state.liveSessions = payload.sessions || [];
-        if (payload.stats?.liveSessionsCount !== undefined) {
-          state.stats.liveSessionsCount = payload.stats.liveSessionsCount;
-        }
-        state.liveSessionsLoaded = true;
-      } finally {
-        state.liveSessionsLoading = false;
-        render();
-      }
-    }
-
-    async function downloadLiveSession(sessionId) {
-      if (!sessionId) return;
-      try {
-        const payload = await postAction("/api/live-sessions/download", { sessionId });
-        const blob = new Blob([payload.text || ""], { type: "text/plain;charset=utf-8" });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = payload.fileName || "live-support-transcript.txt";
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-        setTimeout(() => URL.revokeObjectURL(url), 1000);
-        tg?.HapticFeedback?.notificationOccurred?.("success");
-        showToast("Transcript download started.");
-      } catch (error) {
-        tg?.HapticFeedback?.notificationOccurred?.("error");
-        showToast(displayErrorMessage(error), true);
-      }
-    }
-
     function applyStatePayload(payload) {
       if (payload.bot) state.bot = payload.bot;
       if (payload.user) state.user = payload.user;
@@ -2770,6 +3819,8 @@
       if (payload.deposits) state.deposits = payload.deposits;
       if (payload.transactions) state.transactions = payload.transactions;
       if (payload.depositMethods) state.depositMethods = payload.depositMethods;
+      if (payload.disabledPaymentMethods) state.disabledPaymentMethods = payload.disabledPaymentMethods;
+      if (!methodById(state.depositMethod) && state.depositMethods[0]) state.depositMethod = state.depositMethods[0].id;
       if (payload.customEmojiIds) state.customEmojiIds = payload.customEmojiIds;
       if (payload.customEmojiUrls) state.customEmojiUrls = payload.customEmojiUrls;
       void preloadCustomEmojis().then(() => {
@@ -2801,7 +3852,11 @@
     }
 
     function orderPaymentMethods() {
-      return state.depositMethods.concat([{ id: "other", label: "Other Payment Methods", iconKey: "otherPayment" }]);
+      const methods = state.depositMethods.slice();
+      if (!paymentMethodDisabled("other")) {
+        methods.push({ id: "other", label: "Other Payment Methods", iconKey: "otherPayment" });
+      }
+      return methods;
     }
 
     function upiQrUrl(noteCode = "", amountInr = "") {
@@ -2814,16 +3869,16 @@
 
     function checkoutSummaryHtml(checkout) {
       const couponLine = checkout.coupon
-        ? metricRow("Coupon", checkout.coupon.code + " (-" + checkout.discountUsdt + " USDT)")
+        ? '<div class="small">Coupon: <b>' + escapeHtml(checkout.coupon.code) + '</b> (-' + escapeHtml(currencyMoney(checkout.discountUsdt)) + ')</div>'
         : "";
-      return '<section class="metric-card">' +
-        metricRow("Product", checkout.product.name) +
-        metricRow("Qty", String(checkout.qty)) +
-        metricRow("Price", checkout.unitPayableUsdt + " USDT") +
-        metricRow("Subtotal", checkout.subtotalUsdt + " USDT") +
+      return '<section class="checkout-card">' +
+        '<div class="checkout-main-row">' +
+          '<div><div class="checkout-product-name">' + escapeHtml(checkout.product.name) + '</div><div class="small">$' + escapeHtml(checkout.unitPayableUsdt) + ' × ' + escapeHtml(checkout.qty) + '</div></div>' +
+          '<div class="checkout-price">$' + escapeHtml(checkout.totalUsdt) + '</div>' +
+        '</div>' +
         couponLine +
-        metricRow("Total", checkout.totalUsdt + " USDT") +
-        metricRow("Wallet Balance", checkout.walletBalanceUsdt + " Credits") +
+        '<div class="checkout-total-row"><span>Total payable</span><strong>$' + escapeHtml(checkout.totalUsdt) + '</strong></div>' +
+        '<div class="small">Account balance: $' + escapeHtml(checkout.walletBalanceUsdt) + '</div>' +
       '</section>';
     }
 
@@ -2979,7 +4034,7 @@
             deliverySummaryRow("Order ID# :", delivery.orderRef) +
             deliverySummaryRow("Product", delivery.productName) +
             deliverySummaryRow("Quantity", String(delivery.quantity || 1)) +
-            deliverySummaryRow("Total Paid", (delivery.totalPaidUsdt || "0") + " USDT") +
+            deliverySummaryRow("Total Paid", currencyMoney(delivery.totalPaidUsdt || 0)) +
           '</div>'
         : "";
       const items = isDelivered
@@ -3058,11 +4113,10 @@
         '</button>'
       ).join("");
       const walletDisabled = (!checkout || !checkout.walletCanPay) ? " disabled" : "";
-      const walletText = checkout?.walletCanPay ? "Wallet Pay" : "Insufficient Balance";
-      const canPayDirectly = !!checkout && !checkout.walletCanPay;
+      const walletText = checkout?.walletCanPay ? "$" + checkout.totalUsdt : "Need $" + (checkout?.totalUsdt || "0");
+      const canPayDirectly = !!checkout;
       const directPaymentHtml = canPayDirectly
-        ? '<button class="btn secondary full" type="button" data-action="deposit">' + customEmoji("deposit", "$") + 'Deposit first</button>' +
-          '<div class="label">Pay Directly</div>' +
+        ? '<div class="label">Pay directly</div>' +
           '<div class="deposit-methods">' + methodButtons + '</div>'
         : "";
       openSheet(
@@ -3071,8 +4125,10 @@
         (error ? '<p class="notice error">' + escapeHtml(error) + '</p>' : "") +
         (checkout ? checkoutCustomFieldsHtml(checkout) : "") +
         '<button class="btn secondary full" type="button" data-action="changeCoupon" data-coupon="' + escapeHtml(couponCode) + '">' + (couponCode ? "Change Coupon" : "Add Coupon") + '</button>' +
-        '<div class="label">Wallet</div>' +
-        '<button class="btn full" type="button" data-action="payWallet" data-coupon="' + escapeHtml(couponCode) + '"' + walletDisabled + '>' + customEmoji("wallet", "$") + walletText + '</button>' +
+        '<div class="label">Payment method</div>' +
+        '<button class="checkout-pay-card" type="button" data-action="payWallet" data-coupon="' + escapeHtml(couponCode) + '"' + walletDisabled + '>' +
+          '<div><strong>' + customEmoji("wallet", "$") + 'Account balance</strong><span>Instant - no extra steps</span></div><div class="price">' + escapeHtml(walletText) + '</div>' +
+        '</button>' +
         directPaymentHtml
       );
     }
@@ -3219,6 +4275,7 @@
         const requestedMethod = methodId || state.depositMethod || "binance_pay";
         const payload = await postAction("/api/deposit/session", { method: requestedMethod });
         state.depositMethods = payload.depositMethods || state.depositMethods;
+        state.disabledPaymentMethods = payload.disabledPaymentMethods || state.disabledPaymentMethods;
         state.depositMethod = payload.selectedMethod || requestedMethod;
       } catch (error) {
         closeSheet();
@@ -3261,8 +4318,15 @@
       const amountPlaceholder = method.amountPlaceholder || (method.id === "upi" ? "INR amount you sent (optional)" : "USDT amount you sent (optional)");
       const referenceInput = '<label class="form-field"><span>' + escapeHtml(method.referenceLabel || "Transaction ID / Hash") + '</span><input class="input" id="depositRef" autocomplete="off" placeholder="' + escapeHtml(method.placeholder || "Paste reference") + '"' + referenceAttrs + '></label>';
       openSheet(
-        '<div class="sheet-title"><span>' + customEmoji("deposit", "💰") + 'Make a deposit</span><button class="icon-btn" type="button" data-action="closeSheet">' + customEmoji("close", "×", "solo") + '</button></div>' +
-        '<div class="label">Payment method</div>' +
+        '<div class="sheet-title"><span>Deposit</span><button class="icon-btn" type="button" data-action="closeSheet">' + customEmoji("close", "x", "solo") + '</button></div>' +
+        '<section class="deposit-topup-hero">' +
+          '<span class="pill-label">Add funds</span>' +
+          '<h2>Top up your balance</h2>' +
+          '<p class="small">Pick a payment method below, follow the simple steps, and your balance updates after verification.</p>' +
+          '<div class="deposit-balance-card"><span>Current balance</span><strong>' + escapeHtml(currencyMoney(state.user.balanceUsdt)) + '</strong></div>' +
+          '<div class="trust-row"><span>Secure payment</span><span>Auto-verified deposits</span><span>Support ready</span></div>' +
+        '</section>' +
+        '<div class="step-title"><b>1</b><span>Choose a payment method</span></div>' +
         '<div class="deposit-methods">' + methodButtons + '</div>' +
         qrBlock +
         addressBlock +
@@ -3280,7 +4344,7 @@
       const need = Math.max(0, totalFor(product) - Number(state.user.balanceUsdt || 0));
       openSheet(
         '<div class="sheet-title"><span>Insufficient balance</span><button class="icon-btn" type="button" data-action="closeSheet">' + customEmoji("close", "×", "solo") + '</button></div>' +
-        '<p class="small">You need ' + money(need) + ' USDT more. Add balance here, then buy again inside the Mini App.</p>' +
+        '<p class="small">You need ' + escapeHtml(currencyMoney(need)) + ' more. Add balance here, then buy again inside the Mini App.</p>' +
         '<button class="btn full" type="button" data-action="deposit">' + customEmoji("deposit", "💰") + 'Make a deposit</button>'
       );
     }
@@ -3320,7 +4384,7 @@
       const selected = String(state.user.currencyCode || state.settings.selectedCurrency || "USD").toUpperCase();
       const options = state.settings.currencyOptions?.length
         ? state.settings.currencyOptions
-        : [{ code: "USD", label: "USD - US Dollar" }];
+        : [{ code: "USD", label: "USD - US Dollar (United States)" }];
       openSheet(
         '<div class="sheet-title"><span>Currency</span><button class="icon-btn" type="button" data-action="closeSheet">' + customEmoji("close", "x", "solo") + '</button></div>' +
         '<div class="deposit-methods">' +
@@ -3499,8 +4563,67 @@
       }
     }
 
+    function orderById(orderId) {
+      return state.orders.find((item) => Number(item.id) === Number(orderId));
+    }
+
+    function orderTextPayload(order) {
+      const items = Array.isArray(order.items) ? order.items.filter(Boolean) : [];
+      return [
+        "Order #: " + rawOrderRefClient(order),
+        "Product: " + (order.productName || "Order"),
+        "Status: " + (order.statusLabel || prettyOrderStatus(order.status)),
+        "Quantity: " + String(order.quantity || 1),
+        "Total paid: " + currencyMoney(order.amountUsdt),
+        "Placed: " + formatDate(order.createdAt),
+        order.deliveredAt ? "Delivered: " + formatDate(order.deliveredAt) : "",
+        "",
+        "Items:",
+        items.length ? items.join("\n") : orderStatusNote(order),
+      ].filter((line, index, arr) => line || arr[index - 1] !== "").join("\n");
+    }
+
+    function csvCell(value) {
+      const raw = String(value ?? "");
+      return /[",\n\r]/.test(raw) ? '"' + raw.replaceAll('"', '""') + '"' : raw;
+    }
+
+    function orderCsvPayload(order) {
+      const rows = [
+        ["Field", "Value"],
+        ["Order #", rawOrderRefClient(order)],
+        ["Product", order.productName || "Order"],
+        ["Status", order.statusLabel || prettyOrderStatus(order.status)],
+        ["Quantity", String(order.quantity || 1)],
+        ["Total paid", currencyMoney(order.amountUsdt)],
+        ["Placed", formatDate(order.createdAt)],
+      ];
+      if (order.deliveredAt) rows.push(["Delivered", formatDate(order.deliveredAt)]);
+      rows.push([]);
+      rows.push(["Item #", "Value"]);
+      const items = Array.isArray(order.items) ? order.items.filter(Boolean) : [];
+      if (items.length) {
+        items.forEach((item, index) => rows.push([String(index + 1), item]));
+      } else {
+        rows.push(["-", orderStatusNote(order)]);
+      }
+      return rows.map((row) => row.map(csvCell).join(",")).join("\n");
+    }
+
+    function downloadFile(filename, content, type) {
+      const blob = new Blob([content], { type });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 500);
+    }
+
     function openSupport() {
-      const user = state.bot.supportUsername || "urweebboii";
+      const user = state.bot.supportUsername || "anubhav_seller_bot";
       tg?.openTelegramLink?.("https://t.me/" + user);
     }
 
@@ -3549,7 +4672,30 @@
 
       const action = target.dataset.action;
       if (target.dataset.tab) setTab(target.dataset.tab);
-      if (action === "tab") setTab(target.dataset.tab || "home");
+      if (action === "tab") setTab(target.dataset.tab || "shop");
+      if (action === "toggleOrder") {
+        const id = Number(target.dataset.orderId || 0);
+        state.expandedOrderId = state.expandedOrderId === id ? 0 : id;
+        renderOrders();
+      }
+      if (action === "copyOrderItems") {
+        const order = orderById(target.dataset.orderId);
+        if (order) copyText(orderTextPayload(order));
+      }
+      if (action === "downloadOrderTxt") {
+        const order = orderById(target.dataset.orderId);
+        if (order) {
+          downloadFile(rawOrderRefClient(order) + "-delivery.txt", orderTextPayload(order), "text/plain;charset=utf-8");
+          showToast("TXT download started.");
+        }
+      }
+      if (action === "downloadOrderCsv") {
+        const order = orderById(target.dataset.orderId);
+        if (order) {
+          downloadFile(rawOrderRefClient(order) + "-delivery.csv", orderCsvPayload(order), "text/csv;charset=utf-8");
+          showToast("CSV download started.");
+        }
+      }
       if (action === "deposit") showDepositSheet();
       if (action === "selectDepositMethod") showDepositSheet(target.dataset.method);
       if (action === "copyDepositValue") copyText(target.dataset.copy || "");
@@ -3565,12 +4711,10 @@
       if (action === "startOrderPayment") startOrderPaymentFromSheet(target.dataset.method || "", target.dataset.coupon || "");
       if (action === "verifyOrderPayment") verifyOrderPaymentFromSheet(target);
       if (action === "support") openSupport();
-      if (action === "liveSessions") setTab("liveSessions");
-      if (action === "refreshLiveSessions") loadLiveSessions(true);
-      if (action === "downloadLiveSession") downloadLiveSession(target.dataset.sessionId || "");
       if (action === "openBot") openBot();
       if (action === "transactions") showTransactionsSheet();
       if (action === "wallet") setTab("wallet");
+      if (action === "orders") setTab("orders");
       if (action === "languageSettings") showLanguageSettingsSheet();
       if (action === "currencySettings") showCurrencySettingsSheet();
       if (action === "saveLanguage") saveLanguageSetting(target.dataset.language || "");
@@ -3588,6 +4732,18 @@
     });
 
     document.addEventListener("input", (event) => {
+      const orderSearch = event.target.closest('[data-action="orderSearch"]');
+      if (orderSearch) {
+        state.orderSearch = orderSearch.value || "";
+        applyOrderSearchFilter();
+        return;
+      }
+      const depositSearch = event.target.closest('[data-action="depositSearch"]');
+      if (depositSearch) {
+        state.depositSearch = depositSearch.value || "";
+        applyDepositSearchFilter();
+        return;
+      }
       const target = event.target.closest('[data-action="qtyInput"]');
       const product = state.product;
       if (!target || !product) return;
@@ -3622,7 +4778,7 @@
       state.ready = false;
       loadShop().catch((error) => {
         state.ready = true;
-        byId("home").innerHTML = emptyHtml("Could not load mini app. Tap refresh to retry.");
+        byId("shop").innerHTML = emptyHtml("Could not load mini app. Tap refresh to retry.");
         setNotice(displayErrorMessage(error), true);
         showAppShell();
       });
@@ -3631,10 +4787,10 @@
     byId("backBtn").addEventListener("click", () => {
       if (state.tab === "product") {
         setTab(state.previousTab || "shop");
-      } else if (state.tab === "liveSessions") {
+      } else if (state.tab === "wallet") {
         setTab("me");
-      } else if (state.tab !== "home") {
-        setTab("home");
+      } else if (state.tab !== "shop") {
+        setTab("shop");
       }
     });
 
@@ -3660,10 +4816,10 @@
       if (!document.hidden) refreshLiveState();
     });
 
-    setTab("home");
+    setTab("shop");
     loadShop().catch((error) => {
       state.ready = true;
-      byId("home").innerHTML = emptyHtml("Could not load mini app. Tap refresh to retry.");
+      byId("shop").innerHTML = emptyHtml("Could not load mini app. Tap refresh to retry.");
       setNotice(displayErrorMessage(error), true);
       showAppShell();
     });
