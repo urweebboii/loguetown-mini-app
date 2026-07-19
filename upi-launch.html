@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
+    />
+    <title>UPI</title>
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background: #171717;
+        color: #fafafa;
+        font-family: system-ui, sans-serif;
+        padding: 24px;
+      }
+      .card {
+        width: min(100%, 420px);
+        text-align: center;
+        background: #222;
+        border: 1px solid #383838;
+        border-radius: 24px;
+        padding: 32px 24px;
+        box-shadow: 0 20px 60px #0008;
+      }
+      .mark {
+        font-size: 44px;
+      }
+      h1 {
+        font-size: 22px;
+        margin: 16px 0 8px;
+      }
+      p {
+        color: #aaa;
+        line-height: 1.55;
+        margin: 8px 0 22px;
+      }
+      .open {
+        display: block;
+        background: #ff2d2d;
+        color: white;
+        text-decoration: none;
+        font-weight: 700;
+        border-radius: 14px;
+        padding: 14px 18px;
+      }
+      .return {
+        font-size: 13px;
+        margin: 18px 0 0;
+      }
+    </style>
+    <script type="module" crossorigin src="./assets/upiLaunch-DIKXutwL.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/modulepreload-polyfill-Dezn_h7o.js">
+    <link rel="modulepreload" crossorigin href="./assets/upi-links-BdjaObx7.js">
+  </head>
+  <body>
+    <main class="card">
+      <div class="mark">₹</div>
+      <h1 data-upi-heading>UPI</h1>
+      <p data-upi-help></p>
+      <a class="open" data-upi-open hidden></a>
+      <p class="return" data-upi-return></p>
+    </main>
+  </body>
+</html>
